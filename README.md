@@ -4,9 +4,9 @@ Capacitor community plugin for speech recognition.
 
 ## Maintainers
 
-| Maintainer | GitHub | Social | Sponsoring Company |
-| -----------| -------| -------| -------------------|
-| Priyank Patel | [priyankpat](https://github.com/priyankpat) | [@priyankpat_](https://twitter.com/priyankpat_) | Ionic |
+| Maintainer    | GitHub                                      | Social                                           | Sponsoring Company |
+| ------------- | ------------------------------------------- | ------------------------------------------------ | ------------------ |
+| Priyank Patel | [priyankpat](https://github.com/priyankpat) | [@priyankpat\_](https://twitter.com/priyankpat_) | Ionic              |
 
 Maintenance Status: Actively Maintained
 
@@ -38,16 +38,23 @@ Android Platform: Register the plugin in your main activity:
 import com.getcapacitor.community.speechrecognition.SpeechRecognition;
 
 public class MainActivity extends BridgeActivity {
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     // Initializes the Bridge
-    this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
-      // Additional plugins you've installed go here
-      // Ex: add(TotallyAwesomePlugin.class);
-      add(SpeechRecognition.class);
-    }});
+    this.init(
+        savedInstanceState,
+        new ArrayList<Class<? extends Plugin>>() {
+
+          {
+            // Additional plugins you've installed go here
+            // Ex: add(TotallyAwesomePlugin.class);
+            add(SpeechRecognition.class);
+          }
+        }
+      );
   }
 }
 ```
@@ -58,19 +65,19 @@ No configuration required for this plugin
 
 ## Supported methods
 
-| Name  | Android | iOS | Web
-| :---- | :--- | :--- | :--- |
-| available | ✅ | ✅ | ❌ 
-| start | ✅ | ❌ | ❌ 
-| stop | ✅ | ❌ | ❌ 
-| getSupportedLanguages | ✅ | ❌ | ❌ 
-| hasPermission | ✅ | ✅ | ❌ 
-| requestPermission | ✅ | ✅ | ❌ 
+| Name                  | Android | iOS | Web |
+| :-------------------- | :------ | :-- | :-- |
+| available             | ✅      | ✅  | ❌  |
+| start                 | ✅      | ✅  | ❌  |
+| stop                  | ✅      | ✅  | ❌  |
+| getSupportedLanguages | ✅      | ❌  | ❌  |
+| hasPermission         | ✅      | ✅  | ❌  |
+| requestPermission     | ✅      | ✅  | ❌  |
 
 ## Usage
 
 ```typescript
-import { Plugins } from '@capacitor/core';
+import { Plugins } from "@capacitor/core";
 
 const { SpeechRecognition } = Plugins;
 
@@ -91,9 +98,9 @@ SpeechRecognition.available();
  * @returns void
  */
 SpeechRecognition.start({
-  language: 'en-US',
+  language: "en-US",
   maxResults: 2,
-  prompt: 'Say something',
+  prompt: "Say something",
   partialResults: true,
   popup: true,
 });
