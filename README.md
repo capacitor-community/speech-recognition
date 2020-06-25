@@ -70,7 +70,7 @@ No configuration required for this plugin
 | available             | ✅      | ✅  | ❌  |
 | start                 | ✅      | ✅  | ❌  |
 | stop                  | ✅      | ✅  | ❌  |
-| getSupportedLanguages | ✅      | ❌  | ❌  |
+| getSupportedLanguages | ✅      | ✅  | ❌  |
 | hasPermission         | ✅      | ✅  | ❌  |
 | requestPermission     | ✅      | ✅  | ❌  |
 
