@@ -1,0 +1,61 @@
+{
+  "name": "@capacitor-community/speech-recognition",
+  "version": "0.0.2",
+  "description": "A native plugin for speech recognition",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "npm-publish": "np"
+  },
+  "author": "Priyank Patel <priyank.patel@stackspace.ca>",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/core": "latest"
+  },
+  "devDependencies": {
+    "@capacitor/android": "latest",
+    "@capacitor/ios": "latest",
+    "husky": "^4.2.5",
+    "np": "^6.2.4",
+    "prettier": "^2.0.5",
+    "prettier-plugin-java": "^0.8.0",
+    "pretty-quick": "^2.0.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.9.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "files": [
+    "dist/",
+    "ios/",
+    "android/",
+    "CapacitorCommunitySpeechRecognition.podspec"
+  ],
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/capacitor-community/speech-recognition"
+  },
+  "bugs": {
+    "url": "https://github.com/capacitor-community/speech-recognition/issues"
+  }
+}
