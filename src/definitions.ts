@@ -5,18 +5,18 @@ declare module "@capacitor/core" {
 }
 
 export interface SpeechRecognitionPlugin {
-  available(): Promise<{ available: boolean; }>;
-  start(options: UtteranceOptions): Promise<void>;
+  available(): Promise<{ available: boolean }>;
+  start(options?: UtteranceOptions): Promise<{ matches: String[] }>;
   stop(): Promise<void>;
-  getSupportedLanguages(): Promise<{ languages: any[]; }>;
-  hasPermission(): Promise<{ permission: boolean; }>;
+  getSupportedLanguages(): Promise<{ languages: any[] }>;
+  hasPermission(): Promise<{ permission: boolean }>;
   requestPermission(): Promise<void>;
 }
 
 export interface UtteranceOptions {
-  language: string;
-  maxResults: number;
-  prompt: string;
-  popup: boolean;
-  partialResults: boolean;
+  language?: string;
+  maxResults?: number;
+  prompt?: string;
+  popup?: boolean;
+  partialResults?: boolean;
 }
