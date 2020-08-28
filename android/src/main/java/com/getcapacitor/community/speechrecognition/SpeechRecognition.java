@@ -160,7 +160,7 @@ public class SpeechRecognition extends Plugin implements Constants {
                 try {
                     ArrayList<String> matchesList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     JSObject result = new JSObject();
-                    result.put("matches", matchesList != null ? matchesList.toArray() : new JSArray());
+                    result.put("matches", new JSArray(matchesList));
                     result.put("status", "success");
                     savedCall.success(result);
                 } catch (Exception ex) {
