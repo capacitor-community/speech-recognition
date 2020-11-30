@@ -97,6 +97,7 @@ public class SpeechRecognition: CAPPlugin {
            
             
             self.recognitionTask = self.speechRecognizer?.recognitionTask(with: self.recognitionRequest!, resultHandler: { (result, error) in
+                var transcriptions: AnyObject?
                 if (result != nil) {
                     let resultArray: NSMutableArray = NSMutableArray()
                     var counter: Int = 0
@@ -109,11 +110,12 @@ public class SpeechRecognition: CAPPlugin {
                         counter+=1
                     }
                     
-                    let transcriptions: [AnyObject] = [AnyObject].init(arrayLiteral: resultArray)
+                    transcriptions = resultArray
                     
-                    call.success([
+                    self.notifyListeners("transcription", data: ["matches": transcriptions!])
+                    /* call.success([
                         "matches": transcriptions
-                    ])
+                    ]) */
                 }
                 
                 if (error != nil) {
@@ -126,10 +128,15 @@ public class SpeechRecognition: CAPPlugin {
                 }
                 
                 if result!.isFinal {
+                    
                     self.audioEngine.stop()
                     self.audioEngine.inputNode.removeTap(onBus: 0)
                     self.recognitionTask = nil
                     self.recognitionRequest = nil
+                    print("Resolving as final...")
+                    call.success([
+                        "matches": transcriptions
+                    ]) 
                 }
             })
             
@@ -147,6 +154,12 @@ public class SpeechRecognition: CAPPlugin {
                 inputNode.removeTap(onBus: 0)
             }
             
+            if (self.recognitionTask != nil) {
+                self.recognitionTask = nil
+            }
+            if (self.recognitionRequest != nil) {
+                self.recognitionRequest = nil
+            }
             call.success()
         }
     }

@@ -1,27 +1,28 @@
 # Capacitor Speech Recognition Plugin
 
-Capacitor community plugin for speech recognition.
+Capacitor plugin for speech recognition.
 
 ## Maintainers
 
 | Maintainer    | GitHub                                      | Social                                           | Sponsoring Company |
 | ------------- | ------------------------------------------- | ------------------------------------------------ | ------------------ |
 | Priyank Patel | [priyankpat](https://github.com/priyankpat) | [@priyankpat\_](https://twitter.com/priyankpat_) | Ionic              |
+| Maddie        | [1MaddieX](https://github.com/1MaddieX)     | don't have twitter                               | Conan AI           |
 
-Maintenance Status: Actively Maintained
+Maintenance Status: Occasionally Maintained
 
 ## Installation
 
 To use npm
 
 ```bash
-npm install @capacitor-community/speech-recognition
+npm install comingsoon
 ```
 
 To use yarn
 
 ```bash
-yarn add @capacitor-community/speech-recognition
+yarn add comingsoon
 ```
 
 Sync native files
@@ -97,6 +98,8 @@ SpeechRecognition.available();
  *        popup - display popup window when listening for utterance (Android only)
  * @returns void
  */
+
+
 SpeechRecognition.start({
   language: "en-US",
   maxResults: 2,
@@ -104,6 +107,14 @@ SpeechRecognition.start({
   partialResults: true,
   popup: true,
 });
+
+/* On iOS, this method also emits a 'transcription' event that returns an array of responses, which you can listen to via
+*/
+
+const speechListener = <PluginRegistry>.<Plugin>.addListener("transcription", data => {
+    this.textOutput = data.matches[0];
+    // other handling code down here...
+    }
 
 /**
  * This method will stop listening for utterance
