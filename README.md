@@ -16,13 +16,13 @@ Maintenance Status: Occasionally Maintained
 To use npm
 
 ```bash
-npm install comingsoon
+npm install @conan-ai/cap-speech-recognition
 ```
 
 To use yarn
 
 ```bash
-yarn add comingsoon
+yarn add @conan-ai/cap-speech-recognition
 ```
 
 Sync native files
@@ -33,7 +33,7 @@ npx cap sync
 
 iOS Platform: No further action required.
 
-Android Platform: Register the plugin in your main activity:
+Android Platform: (NOTE: SOME THINGS MAY BE BROKEN) Register the plugin in your main activity:
 
 ```java
 import com.getcapacitor.community.speechrecognition.SpeechRecognition;
