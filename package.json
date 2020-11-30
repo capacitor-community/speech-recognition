@@ -1,22 +1,24 @@
 {
-  "name": "@capacitor-community/speech-recognition",
+  "name": "conan-speech-rec",
   "version": "0.0.4",
   "description": "A native plugin for speech recognition",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
     "build": "npm run clean && tsc",
+    "build-new": "npm run clean && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
     "npm-publish": "np"
   },
-  "author": "Priyank Patel <priyank.patel@stackspace.ca>",
+  "author": "Conan AI <hello@conan-ai.co>",
   "license": "MIT",
   "dependencies": {
-    "@capacitor/core": "latest"
+    "@capacitor/core": "^2.4.3"
   },
   "devDependencies": {
+    "rollup": "^2.34.0",
     "@capacitor/android": "latest",
     "@capacitor/ios": "latest",
     "husky": "^4.2.5",
@@ -25,6 +27,7 @@
     "prettier-plugin-java": "^0.8.0",
     "pretty-quick": "^2.0.1",
     "rimraf": "^3.0.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "typescript": "^3.9.5"
   },
   "husky": {
@@ -53,9 +56,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/capacitor-community/speech-recognition"
+    "url": "https://github.com/ConanAI/speech-recognition"
   },
   "bugs": {
-    "url": "https://github.com/capacitor-community/speech-recognition/issues"
+    "url": "https://github.com/ConanAI/speech-recognition/issues"
   }
 }

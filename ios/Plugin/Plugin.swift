@@ -1,4 +1,5 @@
 import Foundation
+import AVFoundation
 import Capacitor
 import Speech
 
@@ -16,10 +17,10 @@ public class SpeechRecognition: CAPPlugin {
     let MESSAGE_ONGOING = "Ongoing speech recognition"
     let MESSAGE_UNKNOWN = "Unknown error occured"
     
-    private var speechRecognizer : SFSpeechRecognizer?
-    private var audioEngine : AVAudioEngine?
-    private var recognitionRequest : SFSpeechAudioBufferRecognitionRequest?
-    private var recognitionTask : SFSpeechRecognitionTask?
+    private var speechRecognizer = SFSpeechRecognizer()
+    private var audioEngine = AVAudioEngine()
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
     
     @objc func available(_ call: CAPPluginCall) {
         if SFSpeechRecognizer.self != nil {
@@ -34,11 +35,13 @@ public class SpeechRecognition: CAPPlugin {
     }
     
     @objc func start(_ call: CAPPluginCall) {
-        if self.audioEngine!.isRunning {
-            call.error(self.MESSAGE_ONGOING)
-            return
-        }
         
+        if self.audioEngine != nil{
+            if self.audioEngine.isRunning {
+                call.error(self.MESSAGE_ONGOING)
+                return
+        }
+        }
         let status: SFSpeechRecognizerAuthorizationStatus = SFSpeechRecognizer.authorizationStatus()
         if status != SFSpeechRecognizerAuthorizationStatus.authorized {
             call.error(self.MESSAGE_MISSING_PERMISSION)
@@ -60,20 +63,38 @@ public class SpeechRecognition: CAPPlugin {
                 self.recognitionTask = nil
             }
             
-            let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
+            let audioSession = AVAudioSession.sharedInstance()
             do {
-                try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
-                try audioSession.setMode(AVAudioSession.Mode.default)
-                try audioSession.setActive(true, options: AVAudioSession.SetActiveOptions.notifyOthersOnDeactivation)
+                print("setting up audio session...")
+                try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+                // try audioSession.setMode(AVAudioSession.Mode.default)
+                try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
             } catch {
-                
+                print("error setting up audio session")
+            }
+            
+            
+            
+            let inputNode = self.audioEngine.inputNode
+            let format = inputNode.outputFormat(forBus: 0)
+            
+            inputNode.installTap(onBus: 0, bufferSize: 1024, format: format) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+                self.recognitionRequest?.append(buffer)
+            }
+            
+            self.audioEngine.prepare()
+            do {
+                try self.audioEngine.start()
+            } catch {
+                call.error(self.MESSAGE_UNKNOWN)
             }
             
             self.recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+            
+            guard self.recognitionRequest == self.recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
             self.recognitionRequest?.shouldReportPartialResults = partialResults
             
-            let inputNode: AVAudioInputNode = self.audioEngine!.inputNode
-            let format: AVAudioFormat = inputNode.outputFormat(forBus: 0)
+           
             
             self.recognitionTask = self.speechRecognizer?.recognitionTask(with: self.recognitionRequest!, resultHandler: { (result, error) in
                 if (result != nil) {
@@ -82,6 +103,7 @@ public class SpeechRecognition: CAPPlugin {
                     
                     for transcription: SFTranscription in result!.transcriptions {
                         if maxResults > 0 && counter < maxResults {
+                            print(transcription)
                             resultArray.add(transcription.formattedString)
                         }
                         counter+=1
@@ -95,8 +117,8 @@ public class SpeechRecognition: CAPPlugin {
                 }
                 
                 if (error != nil) {
-                    self.audioEngine!.stop()
-                    self.audioEngine?.inputNode.removeTap(onBus: 0)
+                    self.audioEngine.stop()
+                    self.audioEngine.inputNode.removeTap(onBus: 0)
                     self.recognitionRequest = nil
                     self.recognitionTask = nil
                     
@@ -104,31 +126,25 @@ public class SpeechRecognition: CAPPlugin {
                 }
                 
                 if result!.isFinal {
-                    self.audioEngine!.stop()
-                    self.audioEngine?.inputNode.removeTap(onBus: 0)
+                    self.audioEngine.stop()
+                    self.audioEngine.inputNode.removeTap(onBus: 0)
                     self.recognitionTask = nil
                     self.recognitionRequest = nil
                 }
             })
             
-            inputNode.installTap(onBus: 0, bufferSize: 1024, format: format) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
-                self.recognitionRequest?.append(buffer)
-            }
             
-            self.audioEngine?.prepare()
-            do {
-                try self.audioEngine?.start()
-            } catch {
-                call.error(self.MESSAGE_UNKNOWN)
-            }
+            
         }
     }
     
     @objc func stop(_ call: CAPPluginCall) {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
-            if self.audioEngine!.isRunning {
-                self.audioEngine?.stop()
+            if self.audioEngine.isRunning {
+                self.audioEngine.stop()
                 self.recognitionRequest?.endAudio()
+                let inputNode: AVAudioInputNode = self.audioEngine.inputNode
+                inputNode.removeTap(onBus: 0)
             }
             
             call.success()
@@ -153,7 +169,9 @@ public class SpeechRecognition: CAPPlugin {
         let speechAuthGranted : Bool = (status == SFSpeechRecognizerAuthorizationStatus.authorized)
         
         if (!speechAuthGranted) {
-            call.error(MESSAGE_MISSING_PERMISSION)
+            call.success([
+                "permission": false
+            ])
             return
         }
         
