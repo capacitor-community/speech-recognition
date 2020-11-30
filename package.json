@@ -1,7 +1,7 @@
 {
   "name": "conan-speech-rec",
-  "version": "0.0.4",
-  "description": "A native plugin for speech recognition",
+  "version": "0.0.1",
+  "description": "A native capacitorjs plugin for speech recognition, optimized for iOS",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
