@@ -1,5 +1,5 @@
 {
-  "name": "@conan-ai/cap-speech-recognition",
+  "name": "cap-speech-recognition",
   "version": "0.0.1",
   "description": "A native capacitorjs plugin for speech recognition, optimized for iOS",
   "main": "dist/esm/index.js",
