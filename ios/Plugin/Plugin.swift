@@ -21,6 +21,24 @@ public class SpeechRecognition: CAPPlugin {
     private var audioEngine = AVAudioEngine()
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
+    private var autoTimeoutTimer: Timer?
+    private var privateTransArr: AnyObject?
+    private var timeout = 2
+    
+    private func restartSilenceTimer() {
+        print("Restarting timer...")
+        autoTimeoutTimer?.invalidate()
+        
+        autoTimeoutTimer = Timer.scheduledTimer(timeInterval: TimeInterval(self.timeout), target: self, selector: #selector(self.speechTimedOut), userInfo: nil, repeats: false)
+    }
+    
+    private func quitSilenceTimer() {
+        print("Quitting timer...")
+        autoTimeoutTimer?.invalidate()
+        
+        autoTimeoutTimer = nil
+    }
+
     
     @objc func available(_ call: CAPPluginCall) {
         if SFSpeechRecognizer.self != nil {
@@ -94,11 +112,12 @@ public class SpeechRecognition: CAPPlugin {
             guard self.recognitionRequest == self.recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
             self.recognitionRequest?.shouldReportPartialResults = partialResults
             
-           
+            self.restartSilenceTimer()
             
             self.recognitionTask = self.speechRecognizer?.recognitionTask(with: self.recognitionRequest!, resultHandler: { (result, error) in
                 var transcriptions: AnyObject?
                 if (result != nil) {
+                    self.restartSilenceTimer()
                     let resultArray: NSMutableArray = NSMutableArray()
                     var counter: Int = 0
                     
@@ -123,14 +142,16 @@ public class SpeechRecognition: CAPPlugin {
                     self.audioEngine.inputNode.removeTap(onBus: 0)
                     self.recognitionRequest = nil
                     self.recognitionTask = nil
-                    
+                    self.quitSilenceTimer()
                     call.error(error!.localizedDescription)
                 }
                 
                 if result!.isFinal {
-                    
+                    self.quitSilenceTimer()
                     self.audioEngine.stop()
                     self.audioEngine.inputNode.removeTap(onBus: 0)
+                    // might be unnecessary BUT this finish call is thrown in there :)
+                    self.recognitionTask?.finish()
                     self.recognitionTask = nil
                     self.recognitionRequest = nil
                     print("Resolving as final...")
@@ -143,6 +164,19 @@ public class SpeechRecognition: CAPPlugin {
             
             
         }
+    }
+    
+    @objc private func speechTimedOut() {
+        print("Speech timed out")
+        self.quitSilenceTimer()
+        self.audioEngine.stop()
+        self.audioEngine.inputNode.removeTap(onBus: 0)
+        // might be unnecessary BUT this finish call is thrown in there :)
+        self.recognitionTask?.finish()
+        self.recognitionTask = nil
+        self.recognitionRequest = nil
+        print("Resolving as timed out/final...")
+        
     }
     
     @objc func stop(_ call: CAPPluginCall) {
@@ -160,6 +194,7 @@ public class SpeechRecognition: CAPPlugin {
             if (self.recognitionRequest != nil) {
                 self.recognitionRequest = nil
             }
+            self.quitSilenceTimer()
             call.success()
         }
     }
