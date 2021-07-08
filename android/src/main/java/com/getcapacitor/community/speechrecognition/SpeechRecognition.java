@@ -11,10 +11,11 @@ import android.speech.SpeechRecognizer;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.BuildConfig;
 import com.orhanobut.logger.Logger;
@@ -24,9 +25,13 @@ import java.util.Locale;
 import java.util.concurrent.locks.ReentrantLock;
 import org.json.JSONArray;
 
-@NativePlugin(
-  permissions = { Manifest.permission.RECORD_AUDIO },
-  requestCodes = { SpeechRecognition.REQUEST_CODE_SPEECH }
+@CapacitorPlugin(
+  permissions = {
+    @Permission(
+      strings = { Manifest.permission.RECORD_AUDIO },
+      alias = "record_audio"
+    ),
+  }
 )
 public class SpeechRecognition extends Plugin implements Constants {
   public static final String TAG = "SpeechRecognition";
@@ -77,18 +82,18 @@ public class SpeechRecognition extends Plugin implements Constants {
     boolean val = isSpeechRecognitionAvailable();
     JSObject result = new JSObject();
     result.put("available", val);
-    call.success(result);
+    call.resolve(result);
   }
 
   @PluginMethod
   public void start(PluginCall call) {
     if (!isSpeechRecognitionAvailable()) {
-      call.error(NOT_AVAILABLE);
+      call.unavailable(NOT_AVAILABLE);
       return;
     }
 
     if (!hasAudioPermissions(RECORD_AUDIO_PERMISSION)) {
-      call.error(MISSING_PERMISSION);
+      call.reject(MISSING_PERMISSION);
       return;
     }
 
@@ -108,7 +113,7 @@ public class SpeechRecognition extends Plugin implements Constants {
     try {
       stopListening();
     } catch (Exception ex) {
-      call.error(ex.getLocalizedMessage());
+      call.reject(ex.getLocalizedMessage());
     }
   }
 
@@ -121,7 +126,7 @@ public class SpeechRecognition extends Plugin implements Constants {
     List<String> supportedLanguages = languageReceiver.getSupportedLanguages();
     if (supportedLanguages != null) {
       JSONArray languages = new JSONArray(supportedLanguages);
-      call.success(new JSObject().put("languages", languages));
+      call.resolve(new JSObject().put("languages", languages));
       return;
     }
 
@@ -146,7 +151,7 @@ public class SpeechRecognition extends Plugin implements Constants {
 
   @PluginMethod
   public void hasPermission(PluginCall call) {
-    call.success(
+    call.resolve(
       new JSObject()
       .put("permission", hasAudioPermissions(RECORD_AUDIO_PERMISSION))
     );
@@ -162,9 +167,9 @@ public class SpeechRecognition extends Plugin implements Constants {
             new String[] { RECORD_AUDIO_PERMISSION },
             REQUEST_CODE_PERMISSION
           );
-        call.success();
+        call.resolve();
       } else {
-        call.success();
+        call.resolve();
       }
     }
   }
@@ -190,12 +195,12 @@ public class SpeechRecognition extends Plugin implements Constants {
           );
           JSObject result = new JSObject();
           result.put("matches", new JSArray(matchesList));
-          savedCall.success(result);
+          savedCall.resolve(result);
         } catch (Exception ex) {
-          savedCall.error(ex.getMessage());
+          savedCall.reject(ex.getMessage());
         }
       } else {
-        savedCall.error(Integer.toString(requestCode));
+        savedCall.reject(Integer.toString(requestCode));
       }
 
       SpeechRecognition.this.lock.lock();
@@ -273,7 +278,7 @@ public class SpeechRecognition extends Plugin implements Constants {
               speechRecognizer.startListening(intent);
               SpeechRecognition.this.listening(true);
             } catch (Exception ex) {
-              call.error(ex.getMessage());
+              call.reject(ex.getMessage());
             } finally {
               SpeechRecognition.this.lock.unlock();
             }
@@ -330,7 +335,7 @@ public class SpeechRecognition extends Plugin implements Constants {
       String errorMssg = getErrorText(error);
 
       if (this.call != null) {
-        call.error(errorMssg);
+        call.reject(errorMssg);
       }
     }
 
@@ -344,12 +349,12 @@ public class SpeechRecognition extends Plugin implements Constants {
         JSArray jsArray = new JSArray(matches);
 
         if (this.call != null) {
-          this.call.success(
+          this.call.resolve(
               new JSObject().put("status", "success").put("matches", jsArray)
             );
         }
       } catch (Exception ex) {
-        this.call.success(
+        this.call.resolve(
             new JSObject()
               .put("status", "error")
               .put("message", ex.getMessage())
