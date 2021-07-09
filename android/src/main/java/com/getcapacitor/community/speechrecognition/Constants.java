@@ -3,7 +3,6 @@ package com.getcapacitor.community.speechrecognition;
 import android.Manifest;
 
 public interface Constants {
-  // https://capacitorjs.com/docs/updating/plugins/3-0#android-request-codes
   int REQUEST_CODE_PERMISSION = 2001;
   int REQUEST_CODE_SPEECH = 2002;
   String IS_RECOGNITION_AVAILABLE = "isRecognitionAvailable";
