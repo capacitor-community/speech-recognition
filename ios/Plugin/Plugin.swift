@@ -23,11 +23,11 @@ public class SpeechRecognition: CAPPlugin {
 
     @objc func available(_ call: CAPPluginCall) {
         if SFSpeechRecognizer.self != nil {
-            call.success([
+            call.resolve([
                 "available": true
             ])
         } else {
-            call.success([
+            call.resolve([
                 "available": false
             ])
         }
@@ -36,20 +36,20 @@ public class SpeechRecognition: CAPPlugin {
     @objc func start(_ call: CAPPluginCall) {
         if (self.audioEngine != nil) {
             if (self.audioEngine!.isRunning) {
-                call.error(self.MESSAGE_ONGOING)
+                call.reject(self.MESSAGE_ONGOING)
                 return
             }
         }
 
         let status: SFSpeechRecognizerAuthorizationStatus = SFSpeechRecognizer.authorizationStatus()
         if status != SFSpeechRecognizerAuthorizationStatus.authorized {
-            call.error(self.MESSAGE_MISSING_PERMISSION)
+            call.reject(self.MESSAGE_MISSING_PERMISSION)
             return
         }
 
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if !granted {
-                call.error(self.MESSAGE_ACCESS_DENIED_MICROPHONE)
+                call.reject(self.MESSAGE_ACCESS_DENIED_MICROPHONE)
                 return
             }
 
@@ -92,7 +92,7 @@ public class SpeechRecognition: CAPPlugin {
                         counter+=1
                     }
 
-                    call.success([
+                    call.resolve([
                         "matches": resultArray
                     ])
 
@@ -110,7 +110,7 @@ public class SpeechRecognition: CAPPlugin {
                     self.recognitionRequest = nil
                     self.recognitionTask = nil
 
-                    call.error(error!.localizedDescription)
+                    call.reject(error!.localizedDescription)
                 }
             })
 
@@ -122,7 +122,7 @@ public class SpeechRecognition: CAPPlugin {
             do {
                 try self.audioEngine?.start()
             } catch {
-                call.error(self.MESSAGE_UNKNOWN)
+                call.reject(self.MESSAGE_UNKNOWN)
             }
         }
     }
@@ -134,7 +134,7 @@ public class SpeechRecognition: CAPPlugin {
                 self.recognitionRequest?.endAudio()
             }
 
-            call.success()
+            call.resolve()
         }
     }
 
@@ -146,7 +146,7 @@ public class SpeechRecognition: CAPPlugin {
             languagesArr.add(lang.identifier)
         }
 
-        call.success([
+        call.resolve([
             "languages": languagesArr
         ])
     }
@@ -156,14 +156,14 @@ public class SpeechRecognition: CAPPlugin {
         let speechAuthGranted : Bool = (status == SFSpeechRecognizerAuthorizationStatus.authorized)
 
         if (!speechAuthGranted) {
-            call.success([
+            call.resolve([
                 "permission": false
             ])
             return
         }
 
         AVAudioSession.sharedInstance().requestRecordPermission { (granted: Bool) in
-            call.success([
+            call.resolve([
                 "permission": granted
             ])
         }
@@ -180,19 +180,19 @@ public class SpeechRecognition: CAPPlugin {
                     break
 
                 case SFSpeechRecognizerAuthorizationStatus.denied:
-                    call.error(self.MESSAGE_ACCESS_DENIED)
+                    call.reject(self.MESSAGE_ACCESS_DENIED)
                     break
 
                 case SFSpeechRecognizerAuthorizationStatus.restricted:
-                    call.error(self.MESSAGE_RESTRICTED)
+                    call.reject(self.MESSAGE_RESTRICTED)
                     break
 
                 case SFSpeechRecognizerAuthorizationStatus.notDetermined:
-                    call.error(self.MESSAGE_NOT_DETERMINED)
+                    call.reject(self.MESSAGE_NOT_DETERMINED)
                     break
 
                 @unknown default:
-                    call.error(self.MESSAGE_UNKNOWN)
+                    call.reject(self.MESSAGE_UNKNOWN)
                 }
 
                 if (!speechAuthGranted) {
@@ -201,9 +201,9 @@ public class SpeechRecognition: CAPPlugin {
 
                 AVAudioSession.sharedInstance().requestRecordPermission { (granted: Bool) in
                     if (granted) {
-                        call.success()
+                        call.resolve()
                     } else {
-                        call.error(self.MESSAGE_ACCESS_DENIED_MICROPHONE)
+                        call.reject(self.MESSAGE_ACCESS_DENIED_MICROPHONE)
                     }
                 }
             }
