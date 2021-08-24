@@ -12,6 +12,9 @@
     "npm-publish": "np"
   },
   "author": "Priyank Patel <priyank.patel@stackspace.ca>",
+  "contributors": [
+    "Matteo Padovano <mrbatista@users.noreply.github.com>"
+  ],
   "license": "MIT",
   "dependencies": {
     "@capacitor/core": "latest"

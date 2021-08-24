@@ -4,9 +4,10 @@ Capacitor community plugin for speech recognition.
 
 ## Maintainers
 
-| Maintainer    | GitHub                                      | Social                                           | Sponsoring Company |
-| ------------- | ------------------------------------------- | ------------------------------------------------ | ------------------ |
-| Priyank Patel | [priyankpat](https://github.com/priyankpat) | [@priyankpat\_](https://twitter.com/priyankpat_) | Ionic              |
+| Maintainer      | GitHub                                      | Social                                           | Sponsoring Company |
+| --------------- | ------------------------------------------- | ------------------------------------------------ | ------------------ |
+| Priyank Patel   | [priyankpat](https://github.com/priyankpat) | [@priyankpat\_](https://twitter.com/priyankpat_) | Ionic              |
+| Matteo Padovano | [mrbatista](https://github.com/mrbatista)   | [@mrba7ista](https://twitter.com/mrba7ista)      |                    |
 
 Maintenance Status: Actively Maintained
 
