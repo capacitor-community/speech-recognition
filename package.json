@@ -1,6 +1,6 @@
 {
   "name": "@capacitor-community/speech-recognition",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "A native plugin for speech recognition",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -9,9 +9,12 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "npm-publish": "np"
+    "release": "np"
   },
   "author": "Priyank Patel <priyank.patel@stackspace.ca>",
+  "contributors": [
+    "Matteo Padovano <mrbatista@users.noreply.github.com>"
+  ],
   "license": "MIT",
   "dependencies": {
     "@capacitor/core": "latest"
