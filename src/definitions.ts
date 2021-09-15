@@ -1,9 +1,3 @@
-declare module "@capacitor/core" {
-  interface PluginRegistry {
-    SpeechRecognition: SpeechRecognitionPlugin;
-  }
-}
-
 export interface SpeechRecognitionPlugin {
   available(): Promise<{ available: boolean }>;
   start(options?: UtteranceOptions): Promise<{ matches: String[] }>;

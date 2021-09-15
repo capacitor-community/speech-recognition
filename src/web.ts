@@ -3,35 +3,26 @@ import { SpeechRecognitionPlugin, UtteranceOptions } from "./definitions";
 
 export class SpeechRecognitionWeb extends WebPlugin
   implements SpeechRecognitionPlugin {
-  constructor() {
-    super({
-      name: "SpeechRecognition",
-      platforms: ["web"],
-    });
-  }
   available(): Promise<{ available: boolean }> {
-    throw new Error("Method not implemented.");
+    throw this.unimplemented("Method not implemented on web.");
   }
   start(_options?: UtteranceOptions): Promise<{ matches: String[] }> {
-    throw new Error("Method not implemented.");
+    throw this.unimplemented("Method not implemented on web.");
   }
   stop(): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw this.unimplemented("Method not implemented on web.");
   }
   getSupportedLanguages(): Promise<{ languages: any[] }> {
-    throw new Error("Method not implemented.");
+    throw this.unimplemented("Method not implemented on web.");
   }
   hasPermission(): Promise<{ permission: boolean }> {
-    throw new Error("Method not implemented.");
+    throw this.unimplemented("Method not implemented on web.");
   }
   requestPermission(): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw this.unimplemented("Method not implemented on web.");
   }
 }
 
 const SpeechRecognition = new SpeechRecognitionWeb();
 
 export { SpeechRecognition };
-
-import { registerWebPlugin } from "@capacitor/core";
-registerWebPlugin(SpeechRecognition);

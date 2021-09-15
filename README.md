@@ -78,9 +78,7 @@ No configuration required for this plugin
 ## Usage
 
 ```typescript
-import { Plugins } from "@capacitor/core";
-
-const { SpeechRecognition } = Plugins;
+import { SpeechRecognition } from "@capacitor-community/speech-recognition";
 
 /**
  * This method will check if speech recognition feature is available on the device.
