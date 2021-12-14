@@ -92,9 +92,14 @@ public class SpeechRecognition: CAPPlugin {
                         counter+=1
                     }
 
-                    call.resolve([
-                        "matches": resultArray
-                    ])
+                    if (partialResults) {
+                        self.notifyListeners("partialResults", data: ["matches": resultArray])
+                    } else {
+                        call.resolve([
+                            "matches": resultArray
+                        ])
+                    }
+
 
                     if result!.isFinal {
                         self.audioEngine!.stop()
@@ -121,6 +126,9 @@ public class SpeechRecognition: CAPPlugin {
             self.audioEngine?.prepare()
             do {
                 try self.audioEngine?.start()
+                if (partialResults) {
+                    call.resolve()
+                }
             } catch {
                 call.reject(self.MESSAGE_UNKNOWN)
             }

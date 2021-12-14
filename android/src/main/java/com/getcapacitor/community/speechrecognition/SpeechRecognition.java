@@ -376,6 +376,9 @@ public class SpeechRecognition extends Plugin implements Constants {
           !previousPartialResults.equals(matchesJSON)
         ) {
           previousPartialResults = matchesJSON;
+          JSObject ret = new JSObject();
+          ret.put("value", previousPartialResults);
+          notifyListeners("partialResults", ret);
         }
       } catch (Exception ex) {}
     }
