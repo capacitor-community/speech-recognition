@@ -279,7 +279,7 @@ public class SpeechRecognition extends Plugin implements Constants {
               speechRecognizer.startListening(intent);
               SpeechRecognition.this.listening(true);
               if(partialResults) {
-                call.resolve()
+                call.resolve();
               }
             } catch (Exception ex) {
               call.reject(ex.getMessage());
