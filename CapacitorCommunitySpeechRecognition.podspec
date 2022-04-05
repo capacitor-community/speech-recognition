@@ -1,7 +1,7 @@
 
   Pod::Spec.new do |s|
     s.name = 'CapacitorCommunitySpeechRecognition'
-    s.version = '0.0.1'
+    s.version = '2.1.0'
     s.summary = 'A native plugin for speech recognition'
     s.license = 'MIT'
     s.homepage = 'https://github.com/capacitor-community/speech-recognition'
