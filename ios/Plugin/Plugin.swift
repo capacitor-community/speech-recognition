@@ -22,15 +22,15 @@ public class SpeechRecognition: CAPPlugin {
     private var recognitionTask : SFSpeechRecognitionTask?
 
     @objc func available(_ call: CAPPluginCall) {
-        if SFSpeechRecognizer.self != nil {
-            call.resolve([
-                "available": true
-            ])
-        } else {
+        guard let recognizer = SFSpeechRecognizer() else {
             call.resolve([
                 "available": false
             ])
+            return
         }
+        call.resolve([
+            "available": recognizer.isAvailable
+        ])
     }
 
     @objc func start(_ call: CAPPluginCall) {
