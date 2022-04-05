@@ -274,9 +274,13 @@ public class SpeechRecognition extends Plugin implements Constants {
                 SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
               SpeechRecognitionListener listener = new SpeechRecognitionListener();
               listener.setCall(call);
+              listener.setPartialResults(partialResults);
               speechRecognizer.setRecognitionListener(listener);
               speechRecognizer.startListening(intent);
               SpeechRecognition.this.listening(true);
+              if(partialResults) {
+                call.resolve();
+              }
             } catch (Exception ex) {
               call.reject(ex.getMessage());
             } finally {
@@ -309,9 +313,14 @@ public class SpeechRecognition extends Plugin implements Constants {
 
   private class SpeechRecognitionListener implements RecognitionListener {
     private PluginCall call;
+    private boolean partialResults;
 
     public void setCall(PluginCall call) {
       this.call = call;
+    }
+
+    public void setPartialResults(boolean partialResults) {
+      this.partialResults = partialResults;
     }
 
     @Override
@@ -348,7 +357,7 @@ public class SpeechRecognition extends Plugin implements Constants {
       try {
         JSArray jsArray = new JSArray(matches);
 
-        if (this.call != null) {
+        if (this.call != null && !this.partialResults) {
           this.call.resolve(
               new JSObject().put("status", "success").put("matches", jsArray)
             );
@@ -376,6 +385,9 @@ public class SpeechRecognition extends Plugin implements Constants {
           !previousPartialResults.equals(matchesJSON)
         ) {
           previousPartialResults = matchesJSON;
+          JSObject ret = new JSObject();
+          ret.put("value", previousPartialResults);
+          notifyListeners("partialResults", ret);
         }
       } catch (Exception ex) {}
     }
