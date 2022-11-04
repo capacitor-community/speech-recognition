@@ -31,34 +31,31 @@ Sync native files
 npx cap sync
 ```
 
-iOS Platform: No further action required.
+## iOS
 
-Android Platform: Register the plugin in your main activity:
+No further action required.
 
-```java
-import com.getcapacitor.community.speechrecognition.SpeechRecognition;
+## Android
 
-public class MainActivity extends BridgeActivity {
+In `android/app/src/main/AndroidManifest.xml`, add the following XML elements:
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+Queries (under `<manifest>`)
 
-    // Initializes the Bridge
-    this.init(
-        savedInstanceState,
-        new ArrayList<Class<? extends Plugin>>() {
-
-          {
-            // Additional plugins you've installed go here
-            // Ex: add(TotallyAwesomePlugin.class);
-            add(SpeechRecognition.class);
-          }
-        }
-      );
-  }
-}
+```xml
+<queries>
+  <intent>
+    <action android:name="android.speech.RecognitionService" />
+  </intent>
+</queries>
 ```
+
+Permissions (above the closing `</manifest>` tag)
+
+```xml
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+```
+
+Also ensure that you call `requestPermission` because since API 23+ you need to explictly request permission in runtime.
 
 ## Configuration
 
