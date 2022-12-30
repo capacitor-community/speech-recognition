@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import androidx.activity.result.ActivityResult;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -174,39 +176,31 @@ public class SpeechRecognition extends Plugin implements Constants {
     }
   }
 
-  @Override
-  protected void handleOnActivityResult(
-    int requestCode,
-    int resultCode,
-    Intent data
-  ) {
-    super.handleOnActivityResult(requestCode, resultCode, data);
-
-    PluginCall savedCall = getSavedCall();
-    if (savedCall == null) {
+  @ActivityCallback
+  private void listeningResult(PluginCall call, ActivityResult result) {
+    if (call == null) {
       return;
     }
 
-    if (requestCode == REQUEST_CODE_SPEECH) {
-      if (resultCode == Activity.RESULT_OK) {
-        try {
-          ArrayList<String> matchesList = data.getStringArrayListExtra(
-            RecognizerIntent.EXTRA_RESULTS
-          );
-          JSObject result = new JSObject();
-          result.put("matches", new JSArray(matchesList));
-          savedCall.resolve(result);
-        } catch (Exception ex) {
-          savedCall.reject(ex.getMessage());
-        }
-      } else {
-        savedCall.reject(Integer.toString(requestCode));
+    int resultCode = result.getResultCode();
+    if (resultCode == Activity.RESULT_OK) {
+      try {
+        ArrayList<String> matchesList = result.getData().getStringArrayListExtra(
+          RecognizerIntent.EXTRA_RESULTS
+        );
+        JSObject resultObj = new JSObject();
+        resultObj.put("matches", new JSArray(matchesList));
+        call.resolve(resultObj);
+      } catch (Exception ex) {
+        call.reject(ex.getMessage());
       }
-
-      SpeechRecognition.this.lock.lock();
-      SpeechRecognition.this.listening(false);
-      SpeechRecognition.this.lock.unlock();
+    } else {
+      call.reject(Integer.toString(resultCode));
     }
+
+    SpeechRecognition.this.lock.lock();
+    SpeechRecognition.this.listening(false);
+    SpeechRecognition.this.lock.unlock();
   }
 
   private boolean isSpeechRecognitionAvailable() {
@@ -254,8 +248,7 @@ public class SpeechRecognition extends Plugin implements Constants {
     }
 
     if (showPopup) {
-      saveCall(call);
-      startActivityForResult(call, intent, REQUEST_CODE_SPEECH);
+      startActivityForResult(call, intent, "listeningResult");
     } else {
       bridge
         .getWebView()
