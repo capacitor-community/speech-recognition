@@ -36,27 +36,25 @@ iOS Platform: No further action required.
 Android Platform: Register the plugin in your main activity:
 
 ```java
+import android.os.Bundle;
+import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.community.speechrecognition.SpeechRecognition;
 
+
 public class MainActivity extends BridgeActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
 
-    // Initializes the Bridge
-    this.init(
-        savedInstanceState,
-        new ArrayList<Class<? extends Plugin>>() {
+        registerPlugin(SpeechRecognition.class);
+        // Initializes the Bridge
 
-          {
-            // Additional plugins you've installed go here
-            // Ex: add(TotallyAwesomePlugin.class);
-            add(SpeechRecognition.class);
-          }
-        }
-      );
-  }
+    }
+
+
+
+
 }
 ```
 
