@@ -86,10 +86,14 @@ SpeechRecognition.start({
   partialResults: true,
   popup: true,
 });
-// listin to partial results
+// listen to partial results
 SpeechRecognition.addListener("partialResults", (data: any) => {
   console.log("partialResults was fired", data.matches);
 });
+
+// stop listening partial results
+SpeechRecognition.removeAllListeners();
+
 /**
  * This method will stop listening for utterance
  * @param none
