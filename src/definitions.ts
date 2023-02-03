@@ -7,7 +7,9 @@ export interface SpeechRecognitionPlugin {
   hasPermission(): Promise<{ permission: boolean }>;
   requestPermission(): Promise<void>;
   /**
-   * Called when partialResults set to true and result received
+   * Called when partialResults set to true and result received.
+   *
+   * On Android it doesn't work if popup is true.
    *
    * Provides partial result.
    *
