@@ -10,4 +10,5 @@ CAP_PLUGIN(SpeechRecognition, "SpeechRecognition",
         CAP_PLUGIN_METHOD(getSupportedLanguages, CAPPluginReturnPromise);
         CAP_PLUGIN_METHOD(hasPermission, CAPPluginReturnPromise);
         CAP_PLUGIN_METHOD(requestPermission, CAPPluginReturnPromise);
+        CAP_PLUGIN_METHOD(removeAllListeners, CAPPluginReturnPromise);
 )
