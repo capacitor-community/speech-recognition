@@ -276,9 +276,6 @@ public class SpeechRecognition extends Plugin implements Constants {
             speechRecognizer.setRecognitionListener(listener);
             speechRecognizer.startListening(intent);
             SpeechRecognition.this.listening(true);
-            if (partialResults) {
-              call.resolve();
-            }
           } catch (Exception ex) {
             call.reject(ex.getMessage());
           } finally {
@@ -353,7 +350,7 @@ public class SpeechRecognition extends Plugin implements Constants {
       try {
         JSArray jsArray = new JSArray(matches);
 
-        if (this.call != null && !this.partialResults) {
+        if (this.call != null) {
           this.call.resolve(
               new JSObject().put("status", "success").put("matches", jsArray)
             );
