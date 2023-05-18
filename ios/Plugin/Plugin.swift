@@ -137,11 +137,10 @@ public class SpeechRecognition: CAPPlugin {
 
     @objc func stop(_ call: CAPPluginCall) {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
-            if self.audioEngine!.isRunning {
-                self.audioEngine?.stop()
+            if let engine = self.audioEngine, engine.isRunning {
+                engine.stop()
                 self.recognitionRequest?.endAudio()
             }
-
             call.resolve()
         }
     }
