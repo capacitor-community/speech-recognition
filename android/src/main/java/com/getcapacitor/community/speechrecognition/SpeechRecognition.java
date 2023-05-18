@@ -11,14 +11,12 @@ import android.speech.SpeechRecognizer;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
+import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.BuildConfig;
-import com.orhanobut.logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -48,16 +46,6 @@ public class SpeechRecognition extends Plugin implements Constants {
   @Override
   public void load() {
     super.load();
-
-    Logger.addLogAdapter(
-      new AndroidLogAdapter() {
-        @Override
-        public boolean isLoggable(int priority, @Nullable String tag) {
-          return BuildConfig.DEBUG;
-        }
-      }
-    );
-
     bridge
       .getWebView()
       .post(
@@ -68,8 +56,7 @@ public class SpeechRecognition extends Plugin implements Constants {
               SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
             SpeechRecognitionListener listener = new SpeechRecognitionListener();
             speechRecognizer.setRecognitionListener(listener);
-
-            Logger.i("Instantiated SpeechRecognizer in load()");
+            Logger.info(getLogTag(), "Instantiated SpeechRecognizer in load()");
           }
         }
       );
@@ -77,7 +64,10 @@ public class SpeechRecognition extends Plugin implements Constants {
 
   @PluginMethod
   public void available(PluginCall call) {
-    Logger.i("Called for available(): %b", isSpeechRecognitionAvailable());
+    Logger.info(
+      getLogTag(),
+      "Called for available(): " + isSpeechRecognitionAvailable()
+    );
     boolean val = isSpeechRecognitionAvailable();
     JSObject result = new JSObject();
     result.put("available", val);
@@ -232,7 +222,7 @@ public class SpeechRecognition extends Plugin implements Constants {
     boolean showPopup,
     PluginCall call
   ) {
-    Logger.i("Beginning to listen for audible speech");
+    Logger.info(getLogTag(), "Beginning to listen for audible speech");
 
     final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(
