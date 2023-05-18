@@ -1,6 +1,6 @@
 {
   "name": "@capacitor-community/speech-recognition",
-  "version": "4.0.0",
+  "version": "5.0.0-0",
   "description": "A native plugin for speech recognition",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -17,11 +17,11 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@capacitor/core": "^4.0.0"
+    "@capacitor/core": "^5.0.0"
   },
   "devDependencies": {
-    "@capacitor/android": "^4.0.0",
-    "@capacitor/ios": "^4.0.0",
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/ios": "^5.0.0",
     "husky": "^4.2.5",
     "np": "^6.2.4",
     "prettier": "^2.3.0",
