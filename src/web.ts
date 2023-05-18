@@ -1,8 +1,14 @@
 import { WebPlugin } from "@capacitor/core";
-import { SpeechRecognitionPlugin, UtteranceOptions } from "./definitions";
+import {
+  PermissionStatus,
+  SpeechRecognitionPlugin,
+  UtteranceOptions,
+} from "./definitions";
 
-export class SpeechRecognitionWeb extends WebPlugin
-  implements SpeechRecognitionPlugin {
+export class SpeechRecognitionWeb
+  extends WebPlugin
+  implements SpeechRecognitionPlugin
+{
   available(): Promise<{ available: boolean }> {
     throw this.unimplemented("Method not implemented on web.");
   }
@@ -19,6 +25,12 @@ export class SpeechRecognitionWeb extends WebPlugin
     throw this.unimplemented("Method not implemented on web.");
   }
   requestPermission(): Promise<void> {
+    throw this.unimplemented("Method not implemented on web.");
+  }
+  checkPermissions(): Promise<PermissionStatus> {
+    throw this.unimplemented("Method not implemented on web.");
+  }
+  requestPermissions(): Promise<PermissionStatus> {
     throw this.unimplemented("Method not implemented on web.");
   }
 }
