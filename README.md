@@ -31,34 +31,16 @@ Sync native files
 npx cap sync
 ```
 
-iOS Platform: No further action required.
+## iOS
 
-Android Platform: Register the plugin in your main activity:
+iOS requires the following usage descriptions be added and filled out for your app in `Info.plist`:
 
-```java
-import com.getcapacitor.community.speechrecognition.SpeechRecognition;
+- `NSSpeechRecognitionUsageDescription` (`Privacy - Speech Recognition Usage Description`)
+- `NSMicrophoneUsageDescription` (`Privacy - Microphone Usage Description`)
 
-public class MainActivity extends BridgeActivity {
+## Android
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    // Initializes the Bridge
-    this.init(
-        savedInstanceState,
-        new ArrayList<Class<? extends Plugin>>() {
-
-          {
-            // Additional plugins you've installed go here
-            // Ex: add(TotallyAwesomePlugin.class);
-            add(SpeechRecognition.class);
-          }
-        }
-      );
-  }
-}
-```
+No further action required.
 
 ## Configuration
 
@@ -104,10 +86,14 @@ SpeechRecognition.start({
   partialResults: true,
   popup: true,
 });
-// listin to partial results
+// listen to partial results
 SpeechRecognition.addListener("partialResults", (data: any) => {
   console.log("partialResults was fired", data.matches);
 });
+
+// stop listening partial results
+SpeechRecognition.removeAllListeners();
+
 /**
  * This method will stop listening for utterance
  * @param none

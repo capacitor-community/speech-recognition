@@ -7,7 +7,9 @@ export interface SpeechRecognitionPlugin {
   hasPermission(): Promise<{ permission: boolean }>;
   requestPermission(): Promise<void>;
   /**
-   * Called when partialResults set to true and result received
+   * Called when partialResults set to true and result received.
+   *
+   * On Android it doesn't work if popup is true.
    *
    * Provides partial result.
    *
@@ -17,6 +19,12 @@ export interface SpeechRecognitionPlugin {
     eventName: "partialResults",
     listenerFunc: (data: { matches: string[] }) => void
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  /**
+   * Remove all the listeners that are attached to this plugin.
+   *
+   * @since 4.0.0
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 export interface UtteranceOptions {

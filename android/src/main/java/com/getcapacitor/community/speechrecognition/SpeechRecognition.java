@@ -9,18 +9,15 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import androidx.activity.result.ActivityResult;
-import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
+import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.BuildConfig;
-import com.orhanobut.logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +33,7 @@ import org.json.JSONArray;
   }
 )
 public class SpeechRecognition extends Plugin implements Constants {
+
   public static final String TAG = "SpeechRecognition";
 
   private Receiver languageReceiver;
@@ -49,30 +47,17 @@ public class SpeechRecognition extends Plugin implements Constants {
   @Override
   public void load() {
     super.load();
-
-    Logger.addLogAdapter(
-      new AndroidLogAdapter() {
-
-        @Override
-        public boolean isLoggable(int priority, @Nullable String tag) {
-          return BuildConfig.DEBUG;
-        }
-      }
-    );
-
     bridge
       .getWebView()
       .post(
         new Runnable() {
-
           @Override
           public void run() {
             speechRecognizer =
               SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
             SpeechRecognitionListener listener = new SpeechRecognitionListener();
             speechRecognizer.setRecognitionListener(listener);
-
-            Logger.i("Instantiated SpeechRecognizer in load()");
+            Logger.info(getLogTag(), "Instantiated SpeechRecognizer in load()");
           }
         }
       );
@@ -80,7 +65,10 @@ public class SpeechRecognition extends Plugin implements Constants {
 
   @PluginMethod
   public void available(PluginCall call) {
-    Logger.i("Called for available(): %b", isSpeechRecognitionAvailable());
+    Logger.info(
+      getLogTag(),
+      "Called for available(): " + isSpeechRecognitionAvailable()
+    );
     boolean val = isSpeechRecognitionAvailable();
     JSObject result = new JSObject();
     result.put("available", val);
@@ -155,7 +143,7 @@ public class SpeechRecognition extends Plugin implements Constants {
   public void hasPermission(PluginCall call) {
     call.resolve(
       new JSObject()
-      .put("permission", hasAudioPermissions(RECORD_AUDIO_PERMISSION))
+        .put("permission", hasAudioPermissions(RECORD_AUDIO_PERMISSION))
     );
   }
 
@@ -227,7 +215,7 @@ public class SpeechRecognition extends Plugin implements Constants {
     boolean showPopup,
     PluginCall call
   ) {
-    Logger.i("Beginning to listen for audible speech");
+    Logger.info(getLogTag(), "Beginning to listen for audible speech");
 
     final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(
@@ -252,59 +240,56 @@ public class SpeechRecognition extends Plugin implements Constants {
     } else {
       bridge
         .getWebView()
-        .post(
-          () -> {
-            try {
-              SpeechRecognition.this.lock.lock();
+        .post(() -> {
+          try {
+            SpeechRecognition.this.lock.lock();
 
-              if (speechRecognizer != null) {
-                speechRecognizer.cancel();
-                speechRecognizer.destroy();
-                speechRecognizer = null;
-              }
-
-              speechRecognizer =
-                SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
-              SpeechRecognitionListener listener = new SpeechRecognitionListener();
-              listener.setCall(call);
-              listener.setPartialResults(partialResults);
-              speechRecognizer.setRecognitionListener(listener);
-              speechRecognizer.startListening(intent);
-              SpeechRecognition.this.listening(true);
-              if(partialResults) {
-                call.resolve();
-              }
-            } catch (Exception ex) {
-              call.reject(ex.getMessage());
-            } finally {
-              SpeechRecognition.this.lock.unlock();
+            if (speechRecognizer != null) {
+              speechRecognizer.cancel();
+              speechRecognizer.destroy();
+              speechRecognizer = null;
             }
+
+            speechRecognizer =
+              SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
+            SpeechRecognitionListener listener = new SpeechRecognitionListener();
+            listener.setCall(call);
+            listener.setPartialResults(partialResults);
+            speechRecognizer.setRecognitionListener(listener);
+            speechRecognizer.startListening(intent);
+            SpeechRecognition.this.listening(true);
+            if (partialResults) {
+              call.resolve();
+            }
+          } catch (Exception ex) {
+            call.reject(ex.getMessage());
+          } finally {
+            SpeechRecognition.this.lock.unlock();
           }
-        );
+        });
     }
   }
 
   private void stopListening() {
     bridge
       .getWebView()
-      .post(
-        () -> {
-          try {
-            SpeechRecognition.this.lock.lock();
-            if (SpeechRecognition.this.listening) {
-              speechRecognizer.stopListening();
-              SpeechRecognition.this.listening(false);
-            }
-          } catch (Exception ex) {
-            throw ex;
-          } finally {
-            SpeechRecognition.this.lock.unlock();
+      .post(() -> {
+        try {
+          SpeechRecognition.this.lock.lock();
+          if (SpeechRecognition.this.listening) {
+            speechRecognizer.stopListening();
+            SpeechRecognition.this.listening(false);
           }
+        } catch (Exception ex) {
+          throw ex;
+        } finally {
+          SpeechRecognition.this.lock.unlock();
         }
-      );
+      });
   }
 
   private class SpeechRecognitionListener implements RecognitionListener {
+
     private PluginCall call;
     private boolean partialResults;
 
@@ -379,7 +364,7 @@ public class SpeechRecognition extends Plugin implements Constants {
         ) {
           previousPartialResults = matchesJSON;
           JSObject ret = new JSObject();
-          ret.put("value", previousPartialResults);
+          ret.put("matches", previousPartialResults);
           notifyListeners("partialResults", ret);
         }
       } catch (Exception ex) {}
