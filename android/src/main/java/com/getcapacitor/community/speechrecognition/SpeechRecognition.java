@@ -28,7 +28,7 @@ import org.json.JSONArray;
   permissions = {
     @Permission(
       strings = { Manifest.permission.RECORD_AUDIO },
-      alias = "record_audio"
+      alias = "speechRecognition"
     ),
   }
 )
@@ -173,9 +173,9 @@ public class SpeechRecognition extends Plugin implements Constants {
     int resultCode = result.getResultCode();
     if (resultCode == Activity.RESULT_OK) {
       try {
-        ArrayList<String> matchesList = result.getData().getStringArrayListExtra(
-          RecognizerIntent.EXTRA_RESULTS
-        );
+        ArrayList<String> matchesList = result
+          .getData()
+          .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
         JSObject resultObj = new JSObject();
         resultObj.put("matches", new JSArray(matchesList));
         call.resolve(resultObj);

@@ -177,6 +177,22 @@ public class SpeechRecognition: CAPPlugin {
         }
     }
 
+    @objc override public func checkPermissions(_ call: CAPPluginCall) {
+        let status: SFSpeechRecognizerAuthorizationStatus = SFSpeechRecognizer.authorizationStatus()
+        let permission: String
+        switch status {
+        case .authorized:
+            permission = "granted"
+        case .denied, .restricted:
+            permission = "denied"
+        case .notDetermined:
+            permission = "prompt"
+        @unknown default:
+            permission = "prompt"
+        }
+        call.resolve(["speechRecognition": permission])
+    }
+
     @objc func requestPermission(_ call: CAPPluginCall) {
         SFSpeechRecognizer.requestAuthorization { (status: SFSpeechRecognizerAuthorizationStatus) in
             DispatchQueue.main.async {
@@ -216,6 +232,29 @@ public class SpeechRecognition: CAPPlugin {
                 }
             }
 
+        }
+    }
+
+    @objc override public func requestPermissions(_ call: CAPPluginCall) {
+        SFSpeechRecognizer.requestAuthorization { (status: SFSpeechRecognizerAuthorizationStatus) in
+            DispatchQueue.main.async {
+                switch(status) {
+                case .authorized:
+                    AVAudioSession.sharedInstance().requestRecordPermission { (granted: Bool) in
+                        if (granted) {
+                            call.resolve(["speechRecognition": "granted"])
+                        } else {
+                            call.resolve(["speechRecognition": "denied"])
+                        }
+                    }
+                    break
+                case .denied, .restricted, .notDetermined:
+                    self.checkPermissions(call)
+                    break
+                @unknown default:
+                    self.checkPermissions(call)
+                }
+            }
         }
     }
 }
