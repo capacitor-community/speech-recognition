@@ -123,7 +123,9 @@ public class SpeechRecognition extends Plugin implements Constants {
     Intent detailsIntent = new Intent(
       RecognizerIntent.ACTION_GET_LANGUAGE_DETAILS
     );
-
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      detailsIntent.setPackage("com.google.android.googlequicksearchbox");
+    }
     bridge
       .getActivity()
       .sendOrderedBroadcast(
