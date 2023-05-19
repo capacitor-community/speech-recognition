@@ -123,9 +123,7 @@ public class SpeechRecognition extends Plugin implements Constants {
     Intent detailsIntent = new Intent(
       RecognizerIntent.ACTION_GET_LANGUAGE_DETAILS
     );
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      detailsIntent.setPackage("com.google.android.googlequicksearchbox");
-    }
+
     bridge
       .getActivity()
       .sendOrderedBroadcast(
@@ -335,10 +333,16 @@ public class SpeechRecognition extends Plugin implements Constants {
       try {
         JSArray jsArray = new JSArray(matches);
 
-        if (this.call != null && !this.partialResults) {
-          this.call.resolve(
-              new JSObject().put("status", "success").put("matches", jsArray)
-            );
+        if (this.call != null) {
+          if (!this.partialResults) {
+            this.call.resolve(
+                new JSObject().put("status", "success").put("matches", jsArray)
+              );
+          } else {
+            JSObject ret = new JSObject();
+            ret.put("matches", jsArray);
+            notifyListeners("partialResults", ret);
+          }
         }
       } catch (Exception ex) {
         this.call.resolve(
