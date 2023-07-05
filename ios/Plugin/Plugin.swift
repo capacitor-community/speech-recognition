@@ -67,7 +67,8 @@ public class SpeechRecognition: CAPPlugin {
 
             let audioSession: AVAudioSession = AVAudioSession.sharedInstance()
             do {
-                try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
+                // NOTE: VTX動画の文字起こしと競合するため、コメントアウトして回避
+                // try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
                 try audioSession.setMode(AVAudioSession.Mode.default)
                 try audioSession.setActive(true, options: AVAudioSession.SetActiveOptions.notifyOthersOnDeactivation)
             } catch {
