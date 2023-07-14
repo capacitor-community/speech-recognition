@@ -23,7 +23,7 @@
     "@capacitor/android": "^5.0.0",
     "@capacitor/ios": "^5.0.0",
     "husky": "^4.2.5",
-    "np": "^6.2.4",
+    "np": "^8.0.4",
     "prettier": "^2.3.0",
     "prettier-plugin-java": "^1.0.2",
     "pretty-quick": "^2.0.1",
