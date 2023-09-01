@@ -17,6 +17,14 @@ export interface SpeechRecognitionPlugin {
   available(): Promise<{ available: boolean }>;
   start(options?: UtteranceOptions): Promise<{ matches: string[] }>;
   stop(): Promise<void>;
+  /**
+   * This method will return list of languages supported by the speech recognizer.
+   *
+   * It's not available on Android 13 and newer.
+   *
+   * @param none
+   * @returns languages - array string of languages
+   */
   getSupportedLanguages(): Promise<{ languages: any[] }>;
   /**
    * @deprecated use `checkPermissions()`
