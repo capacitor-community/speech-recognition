@@ -12,7 +12,7 @@ export class SpeechRecognitionWeb
   available(): Promise<{ available: boolean }> {
     throw this.unimplemented("Method not implemented on web.");
   }
-  start(_options?: UtteranceOptions): Promise<{ matches: string[] }> {
+  start(_options?: UtteranceOptions): Promise<{ matches?: string[] }> {
     throw this.unimplemented("Method not implemented on web.");
   }
   stop(): Promise<void> {

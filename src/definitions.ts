@@ -14,8 +14,27 @@ export interface PermissionStatus {
 }
 
 export interface SpeechRecognitionPlugin {
+  /**
+   * This method will check if speech recognition feature is available on the device.
+   * @param none
+   * @returns available - boolean true/false for availability
+   */
   available(): Promise<{ available: boolean }>;
-  start(options?: UtteranceOptions): Promise<{ matches: string[] }>;
+  /**
+   * This method will start to listen for utterance.
+   *
+   * if `partialResults` is `true`, the function respond directly without result and
+   * event `partialResults` will be emit for each partial result, until stopped.
+   *
+   * @param options
+   * @returns void or array of string results
+   */
+  start(options?: UtteranceOptions): Promise<{ matches?: string[] }>;
+  /**
+   * This method will stop listening for utterance
+   * @param none
+   * @returns void
+   */
   stop(): Promise<void>;
   /**
    * This method will return list of languages supported by the speech recognizer.
@@ -27,10 +46,18 @@ export interface SpeechRecognitionPlugin {
    */
   getSupportedLanguages(): Promise<{ languages: any[] }>;
   /**
+   * This method will check for audio permissions.
+   * @param none
+   * @returns permission - boolean true/false if permissions are granted
+   *
    * @deprecated use `checkPermissions()`
    */
   hasPermission(): Promise<{ permission: boolean }>;
   /**
+   * This method will prompt the user for audio permission.
+   * @param none
+   * @returns void
+   *
    * @deprecated use `requestPermissions()`
    */
   requestPermission(): Promise<void>;
@@ -68,9 +95,24 @@ export interface SpeechRecognitionPlugin {
 }
 
 export interface UtteranceOptions {
+  /**
+   * key returned from `getSupportedLanguages()`
+   */
   language?: string;
+  /**
+   * maximum number of results to return (5 is max)
+   */
   maxResults?: number;
+  /**
+   * prompt message to display on popup (Android only)
+   */
   prompt?: string;
+  /**
+   * display popup window when listening for utterance (Android only)
+   */
   popup?: boolean;
+  /**
+   * return partial results if found
+   */
   partialResults?: boolean;
 }
