@@ -76,6 +76,7 @@ SpeechRecognition.available();
  *        prompt - prompt message to display on popup (Android only)
  *        partialResults - return partial results if found
  *        popup - display popup window when listening for utterance (Android only)
+ *        addPunctuation - enable punctuation (IOS only for now)
  * If partialResults is true, the function respond directly without result and event `partialResults` will be emit for each partial result, until stopped.
  * @returns void
  */
@@ -85,6 +86,7 @@ SpeechRecognition.start({
   prompt: "Say something",
   partialResults: true,
   popup: true,
+  addPunctuation: true,
 });
 // listen to partial results
 SpeechRecognition.addListener("partialResults", (data: any) => {

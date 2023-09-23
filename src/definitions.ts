@@ -73,4 +73,5 @@ export interface UtteranceOptions {
   prompt?: string;
   popup?: boolean;
   partialResults?: boolean;
+  addPunctuation?: boolean;
 }
