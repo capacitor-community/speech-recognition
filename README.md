@@ -4,10 +4,10 @@ Capacitor community plugin for speech recognition.
 
 ## Maintainers
 
-| Maintainer      | GitHub                                      | Social                                           | Sponsoring Company |
-| --------------- | ------------------------------------------- | ------------------------------------------------ | ------------------ |
-| Priyank Patel   | [priyankpat](https://github.com/priyankpat) | [@priyankpat\_](https://twitter.com/priyankpat_) | Ionic              |
-| Matteo Padovano | [mrbatista](https://github.com/mrbatista)   | [@mrba7ista](https://twitter.com/mrba7ista)      |                    |
+| Maintainer      | GitHub                                      | Social                                           |
+| --------------- | ------------------------------------------- | ------------------------------------------------ |
+| Priyank Patel   | [priyankpat](https://github.com/priyankpat) | [@priyankpat\_](https://twitter.com/priyankpat_) |
+| Matteo Padovano | [mrbatista](https://github.com/mrbatista)   | [@mrba7ista](https://twitter.com/mrba7ista)      |
 
 Maintenance Status: Actively Maintained
 
@@ -42,43 +42,32 @@ iOS requires the following usage descriptions be added and filled out for your a
 
 No further action required.
 
-## Configuration
-
-No configuration required for this plugin
-
 ## Supported methods
 
-| Name                  | Android | iOS | Web |
-| :-------------------- | :------ | :-- | :-- |
-| available             | ✅      | ✅  | ❌  |
-| start                 | ✅      | ✅  | ❌  |
-| stop                  | ✅      | ✅  | ❌  |
-| getSupportedLanguages | ✅      | ✅  | ❌  |
-| hasPermission         | ✅      | ✅  | ❌  |
-| requestPermission     | ✅      | ✅  | ❌  |
+<docgen-index>
 
-## Usage
+- [`available()`](#available)
+- [`start(...)`](#start)
+- [`stop()`](#stop)
+- [`getSupportedLanguages()`](#getsupportedlanguages)
+- [`hasPermission()`](#haspermission)
+- [`requestPermission()`](#requestpermission)
+- [`checkPermissions()`](#checkpermissions)
+- [`requestPermissions()`](#requestpermissions)
+- [`addListener('partialResults', ...)`](#addlistenerpartialresults)
+- [`removeAllListeners()`](#removealllisteners)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
+
+</docgen-index>
+
+## Example
 
 ```typescript
 import { SpeechRecognition } from "@capacitor-community/speech-recognition";
 
-/**
- * This method will check if speech recognition feature is available on the device.
- * @param none
- * @returns available - boolean true/false for availability
- */
 SpeechRecognition.available();
 
-/**
- * This method will start to listen for utterance.
- * @param language - language key returned from getSupportedLanguages()
- *        maxResults - maximum number of results to return (5 is max)
- *        prompt - prompt message to display on popup (Android only)
- *        partialResults - return partial results if found
- *        popup - display popup window when listening for utterance (Android only)
- * If partialResults is true, the function respond directly without result and event `partialResults` will be emit for each partial result, until stopped.
- * @returns void
- */
 SpeechRecognition.start({
   language: "en-US",
   maxResults: 2,
@@ -94,34 +83,190 @@ SpeechRecognition.addListener("partialResults", (data: any) => {
 // stop listening partial results
 SpeechRecognition.removeAllListeners();
 
-/**
- * This method will stop listening for utterance
- * @param none
- * @returns void
- */
 SpeechRecognition.stop();
 
-/**
- * This method will return list of languages supported by the speech recognizer.
- *
- * It's not available on Android 13 and newer.
- *
- * @param none
- * @returns languages - array string of languages
- */
 SpeechRecognition.getSupportedLanguages();
 
-/**
- * This method will check for audio permissions.
- * @param none
- * @returns permission - boolean true/false if permissions are granted
- */
+SpeechRecognition.checkPermissions();
+
+SpeechRecognition.requestPermissions();
+
 SpeechRecognition.hasPermission();
 
-/**
- * This method will prompt the user for audio permission.
- * @param none
- * @returns void
- */
 SpeechRecognition.requestPermission();
 ```
+
+<docgen-api>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### available()
+
+```typescript
+available() => Promise<{ available: boolean; }>
+```
+
+This method will check if speech recognition feature is available on the device.
+
+**Returns:** <code>Promise&lt;{ available: boolean; }&gt;</code>
+
+---
+
+### start(...)
+
+```typescript
+start(options?: UtteranceOptions) => Promise<{ matches?: string[]; }>
+```
+
+This method will start to listen for utterance.
+
+if `partialResults` is `true`, the function respond directly without result and
+event `partialResults` will be emit for each partial result, until stopped.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#utteranceoptions">UtteranceOptions</a></code> |
+
+**Returns:** <code>Promise&lt;{ matches?: string[]; }&gt;</code>
+
+---
+
+### stop()
+
+```typescript
+stop() => Promise<void>
+```
+
+This method will stop listening for utterance
+
+---
+
+### getSupportedLanguages()
+
+```typescript
+getSupportedLanguages() => Promise<{ languages: any[]; }>
+```
+
+This method will return list of languages supported by the speech recognizer.
+
+It's not available on Android 13 and newer.
+
+**Returns:** <code>Promise&lt;{ languages: any[]; }&gt;</code>
+
+---
+
+### hasPermission()
+
+```typescript
+hasPermission() => Promise<{ permission: boolean; }>
+```
+
+This method will check for audio permissions.
+
+**Returns:** <code>Promise&lt;{ permission: boolean; }&gt;</code>
+
+---
+
+### requestPermission()
+
+```typescript
+requestPermission() => Promise<void>
+```
+
+This method will prompt the user for audio permission.
+
+---
+
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<PermissionStatus>
+```
+
+Check the speech recognition permission.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 5.0.0
+
+---
+
+### requestPermissions()
+
+```typescript
+requestPermissions() => Promise<PermissionStatus>
+```
+
+Request the speech recognition permission.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 5.0.0
+
+---
+
+### addListener('partialResults', ...)
+
+```typescript
+addListener(eventName: "partialResults", listenerFunc: (data: { matches: string[]; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+Called when partialResults set to true and result received.
+
+On Android it doesn't work if popup is true.
+
+Provides partial result.
+
+| Param              | Type                                                   |
+| ------------------ | ------------------------------------------------------ |
+| **`eventName`**    | <code>'partialResults'</code>                          |
+| **`listenerFunc`** | <code>(data: { matches: string[]; }) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+**Since:** 2.0.2
+
+---
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all the listeners that are attached to this plugin.
+
+**Since:** 4.0.0
+
+---
+
+### Interfaces
+
+#### UtteranceOptions
+
+| Prop                 | Type                 | Description                                                      |
+| -------------------- | -------------------- | ---------------------------------------------------------------- |
+| **`language`**       | <code>string</code>  | key returned from `getSupportedLanguages()`                      |
+| **`maxResults`**     | <code>number</code>  | maximum number of results to return (5 is max)                   |
+| **`prompt`**         | <code>string</code>  | prompt message to display on popup (Android only)                |
+| **`popup`**          | <code>boolean</code> | display popup window when listening for utterance (Android only) |
+| **`partialResults`** | <code>boolean</code> | return partial results if found                                  |
+
+#### PermissionStatus
+
+| Prop                    | Type                                                        | Description                                                                                                                                                                      | Since |
+| ----------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`speechRecognition`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for speechRecognition alias. On Android it requests/checks RECORD_AUDIO permission On iOS it requests/checks the speech recognition and microphone permissions. | 5.0.0 |
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+### Type Aliases
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+</docgen-api>
