@@ -263,6 +263,7 @@ public class SpeechRecognition extends Plugin implements Constants {
             listener.setPartialResults(partialResults);
             speechRecognizer.setRecognitionListener(listener);
             speechRecognizer.startListening(intent);
+
             SpeechRecognition.this.listening(true);
             if (partialResults) {
               call.resolve();
@@ -320,7 +321,16 @@ public class SpeechRecognition extends Plugin implements Constants {
     public void onBufferReceived(byte[] buffer) {}
 
     @Override
-    public void onEndOfSpeech() {}
+    public void onEndOfSpeech() {
+      bridge.getWebView().post(() -> {
+        try {
+          SpeechRecognition.this.lock.lock();
+          SpeechRecognition.this.listening(false);
+        } finally {
+          SpeechRecognition.this.lock.unlock();
+        }
+      });
+    }
 
     @Override
     public void onError(int error) {
