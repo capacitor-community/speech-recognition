@@ -148,6 +148,12 @@ public class SpeechRecognition extends Plugin implements Constants {
   }
 
   @PluginMethod
+  public void isListening(PluginCall call) {
+    call.resolve( new JSObject()
+            .put("listening", SpeechRecognition.this.listening));
+  }
+
+  @PluginMethod
   public void requestPermission(PluginCall call) {
     if (!hasAudioPermissions(RECORD_AUDIO_PERMISSION)) {
       if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {

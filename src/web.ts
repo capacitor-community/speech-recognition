@@ -24,6 +24,9 @@ export class SpeechRecognitionWeb
   hasPermission(): Promise<{ permission: boolean }> {
     throw this.unimplemented("Method not implemented on web.");
   }
+  isListening(): Promise<boolean> {
+    throw this.unimplemented("Method not implemented on web.");
+  }
   requestPermission(): Promise<void> {
     throw this.unimplemented("Method not implemented on web.");
   }
