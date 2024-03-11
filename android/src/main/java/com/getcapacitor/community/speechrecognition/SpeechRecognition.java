@@ -263,7 +263,6 @@ public class SpeechRecognition extends Plugin implements Constants {
             listener.setPartialResults(partialResults);
             speechRecognizer.setRecognitionListener(listener);
             speechRecognizer.startListening(intent);
-
             SpeechRecognition.this.listening(true);
             if (partialResults) {
               call.resolve();
