@@ -56,6 +56,7 @@ No further action required.
 - [`requestPermissions()`](#requestpermissions)
 - [`addListener('partialResults', ...)`](#addlistenerpartialresults)
 - [`removeAllListeners()`](#removealllisteners)
+- [`isListening()`](#islistening)
 - [Interfaces](#interfaces)
 - [Type Aliases](#type-aliases)
 
@@ -236,6 +237,16 @@ removeAllListeners() => Promise<void>
 Remove all the listeners that are attached to this plugin.
 
 **Since:** 4.0.0
+
+### isListening()
+
+```typescript
+isListening() => Promise<{ listening: boolean }>
+```
+
+Check if the player is currently listening.
+
+**Since:** 6.0.0
 
 ---
 
