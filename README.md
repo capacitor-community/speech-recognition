@@ -55,6 +55,7 @@ No further action required.
 - [`checkPermissions()`](#checkpermissions)
 - [`requestPermissions()`](#requestpermissions)
 - [`addListener('partialResults', ...)`](#addlistenerpartialresults)
+- [`addListener('listeningState', ...)`](#addlistenerlisteningstate)
 - [`removeAllListeners()`](#removealllisteners)
 - [`isListening()`](#islistening)
 - [Interfaces](#interfaces)
@@ -221,6 +222,26 @@ Provides partial result.
 | ------------------ | ------------------------------------------------------ |
 | **`eventName`**    | <code>'partialResults'</code>                          |
 | **`listenerFunc`** | <code>(data: { matches: string[]; }) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+**Since:** 2.0.2
+
+---
+
+### addListener('listeningState', ...)
+
+```typescript
+addListener(eventName: "listeningState", listenerFunc: (data: { status: 'started' | 'stopped'; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+Called when listening state changed.
+
+
+| Param              | Type                                                   |
+| ------------------ | ------------------------------------------------------ |
+| **`eventName`**    | <code>'listeningState'</code>                          |
+| **`listenerFunc`** | <code>(data: { status: 'started' | 'stopped'; }) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 

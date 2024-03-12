@@ -126,6 +126,7 @@ public class SpeechRecognition: CAPPlugin {
             self.audioEngine?.prepare()
             do {
                 try self.audioEngine?.start()
+                self.notifyListeners("listeningState", data: ["status": "started"])
                 if (partialResults) {
                     call.resolve()
                 }
@@ -140,6 +141,7 @@ public class SpeechRecognition: CAPPlugin {
             if let engine = self.audioEngine, engine.isRunning {
                 engine.stop()
                 self.recognitionRequest?.endAudio()
+                self.notifyListeners("listeningState", data: ["status": "stopped"])
             }
             call.resolve()
         }
