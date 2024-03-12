@@ -35,6 +35,7 @@ import org.json.JSONArray;
 public class SpeechRecognition extends Plugin implements Constants {
 
   public static final String TAG = "SpeechRecognition";
+  private static final String LISTENING_EVENT = "listeningState";
 
   private Receiver languageReceiver;
   private SpeechRecognizer speechRecognizer;
@@ -311,7 +312,17 @@ public class SpeechRecognition extends Plugin implements Constants {
     public void onReadyForSpeech(Bundle params) {}
 
     @Override
-    public void onBeginningOfSpeech() {}
+    public void onBeginningOfSpeech() {
+      try {
+        SpeechRecognition.this.lock.lock();
+        // Notify listeners that recording has started
+        JSObject ret = new JSObject();
+        ret.put("status", "started");
+        SpeechRecognition.this.notifyListeners(LISTENING_EVENT, ret);
+      } finally {
+        SpeechRecognition.this.lock.unlock();
+      }
+    }
 
     @Override
     public void onRmsChanged(float rmsdB) {}
@@ -325,6 +336,10 @@ public class SpeechRecognition extends Plugin implements Constants {
         try {
           SpeechRecognition.this.lock.lock();
           SpeechRecognition.this.listening(false);
+
+          JSObject ret = new JSObject();
+          ret.put("status", "stopped");
+          SpeechRecognition.this.notifyListeners(LISTENING_EVENT, ret);
         } finally {
           SpeechRecognition.this.lock.unlock();
         }
