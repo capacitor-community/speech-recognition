@@ -245,7 +245,7 @@ Called when listening state changed.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
-**Since:** 2.0.2
+**Since:** 6.0.0
 
 ---
 
