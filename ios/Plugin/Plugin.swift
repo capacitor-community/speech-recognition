@@ -145,6 +145,13 @@ public class SpeechRecognition: CAPPlugin {
         }
     }
 
+    @objc func isListening(_ call: CAPPluginCall) {
+    let isListening = self.audioEngine?.isRunning ?? false
+    call.resolve([
+        "isListening": isListening
+    ])
+}
+
     @objc func getSupportedLanguages(_ call: CAPPluginCall) {
         let supportedLanguages : Set<Locale>! = SFSpeechRecognizer.supportedLocales() as Set<Locale>
         let languagesArr : NSMutableArray = NSMutableArray()
