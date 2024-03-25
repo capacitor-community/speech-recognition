@@ -53,6 +53,13 @@ export interface SpeechRecognitionPlugin {
    * @deprecated use `checkPermissions()`
    */
   hasPermission(): Promise<{ permission: boolean }>;
+
+  /**
+   * This method will check if speech recognition is listening.
+   * @param none
+   * @returns boolean true/false if speech recognition is currently listening
+   */
+  isListening(): Promise<{ listening: boolean }>;
   /**
    * This method will prompt the user for audio permission.
    * @param none
@@ -85,6 +92,16 @@ export interface SpeechRecognitionPlugin {
   addListener(
     eventName: "partialResults",
     listenerFunc: (data: { matches: string[] }) => void
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+
+  /**
+   * Called when listening state changed.
+   *
+   * @since 6.0.0
+   */
+  addListener(
+    eventName: "listeningState",
+    listenerFunc: (data: { status: 'started' | 'stopped' }) => void
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
   /**
    * Remove all the listeners that are attached to this plugin.

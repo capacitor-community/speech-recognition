@@ -126,6 +126,7 @@ public class SpeechRecognition: CAPPlugin {
             self.audioEngine?.prepare()
             do {
                 try self.audioEngine?.start()
+                self.notifyListeners("listeningState", data: ["status": "started"])
                 if (partialResults) {
                     call.resolve()
                 }
@@ -140,10 +141,18 @@ public class SpeechRecognition: CAPPlugin {
             if let engine = self.audioEngine, engine.isRunning {
                 engine.stop()
                 self.recognitionRequest?.endAudio()
+                self.notifyListeners("listeningState", data: ["status": "stopped"])
             }
             call.resolve()
         }
     }
+
+    @objc func isListening(_ call: CAPPluginCall) {
+    let isListening = self.audioEngine?.isRunning ?? false
+    call.resolve([
+        "isListening": isListening
+    ])
+}
 
     @objc func getSupportedLanguages(_ call: CAPPluginCall) {
         let supportedLanguages : Set<Locale>! = SFSpeechRecognizer.supportedLocales() as Set<Locale>

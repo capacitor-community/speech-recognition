@@ -55,7 +55,9 @@ No further action required.
 - [`checkPermissions()`](#checkpermissions)
 - [`requestPermissions()`](#requestpermissions)
 - [`addListener('partialResults', ...)`](#addlistenerpartialresults)
+- [`addListener('listeningState', ...)`](#addlistenerlisteningstate)
 - [`removeAllListeners()`](#removealllisteners)
+- [`isListening()`](#islistening)
 - [Interfaces](#interfaces)
 - [Type Aliases](#type-aliases)
 
@@ -227,6 +229,26 @@ Provides partial result.
 
 ---
 
+### addListener('listeningState', ...)
+
+```typescript
+addListener(eventName: "listeningState", listenerFunc: (data: { status: 'started' | 'stopped'; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+Called when listening state changed.
+
+
+| Param              | Type                                                   |
+| ------------------ | ------------------------------------------------------ |
+| **`eventName`**    | <code>'listeningState'</code>                          |
+| **`listenerFunc`** | <code>(data: { status: 'started' | 'stopped'; }) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+**Since:** 6.0.0
+
+---
+
 ### removeAllListeners()
 
 ```typescript
@@ -236,6 +258,16 @@ removeAllListeners() => Promise<void>
 Remove all the listeners that are attached to this plugin.
 
 **Since:** 4.0.0
+
+### isListening()
+
+```typescript
+isListening() => Promise<{ listening: boolean }>
+```
+
+Check if the player is currently listening.
+
+**Since:** 6.0.0
 
 ---
 
