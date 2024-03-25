@@ -5,15 +5,14 @@ import Speech
 @objc(SpeechRecognition)
 public class SpeechRecognition: CAPPlugin {
 
-    let DEFAULT_LANGUAGE = "en-US"
-    let DEFAULT_MATCHES = 5
-    let MESSAGE_MISSING_PERMISSION = "Missing permission"
-    let MESSAGE_ACCESS_DENIED = "User denied access to speech recognition"
-    let MESSAGE_RESTRICTED = "Speech recognition restricted on this device"
-    let MESSAGE_NOT_DETERMINED = "Speech recognition not determined on this device"
-    let MESSAGE_ACCESS_DENIED_MICROPHONE = "User denied access to microphone"
-    let MESSAGE_ONGOING = "Ongoing speech recognition"
-    let MESSAGE_UNKNOWN = "Unknown error occured"
+    let defaultMatches = 5
+    let messageMissingPermission = "Missing permission"
+    let messageAccessDenied = "User denied access to speech recognition"
+    let messageRestricted = "Speech recognition restricted on this device"
+    let messageNotDetermined = "Speech recognition not determined on this device"
+    let messageAccessDeniedMicrophone = "User denied access to microphone"
+    let messageOngoing = "Ongoing speech recognition"
+    let messageUnknown = "Unknown error occured"
 
     private var speechRecognizer: SFSpeechRecognizer?
     private var audioEngine: AVAudioEngine?
@@ -35,25 +34,25 @@ public class SpeechRecognition: CAPPlugin {
     @objc func start(_ call: CAPPluginCall) {
         if self.audioEngine != nil {
             if self.audioEngine!.isRunning {
-                call.reject(self.MESSAGE_ONGOING)
+                call.reject(self.messageOngoing)
                 return
             }
         }
 
         let status: SFSpeechRecognizerAuthorizationStatus = SFSpeechRecognizer.authorizationStatus()
         if status != SFSpeechRecognizerAuthorizationStatus.authorized {
-            call.reject(self.MESSAGE_MISSING_PERMISSION)
+            call.reject(self.messageMissingPermission)
             return
         }
 
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if !granted {
-                call.reject(self.MESSAGE_ACCESS_DENIED_MICROPHONE)
+                call.reject(self.messageAccessDeniedMicrophone)
                 return
             }
 
             let language: String = call.getString("language") ?? "en-US"
-            let maxResults: Int = call.getInt("maxResults") ?? self.DEFAULT_MATCHES
+            let maxResults: Int = call.getInt("maxResults") ?? self.defaultMatches
             let partialResults: Bool = call.getBool("partialResults") ?? false
 
             if self.recognitionTask != nil {
@@ -129,7 +128,7 @@ public class SpeechRecognition: CAPPlugin {
                     call.resolve()
                 }
             } catch {
-                call.reject(self.MESSAGE_UNKNOWN)
+                call.reject(self.messageUnknown)
             }
         }
     }
@@ -210,19 +209,19 @@ public class SpeechRecognition: CAPPlugin {
                     break
 
                 case SFSpeechRecognizerAuthorizationStatus.denied:
-                    call.reject(self.MESSAGE_ACCESS_DENIED)
+                    call.reject(self.messageAccessDenied)
                     break
 
                 case SFSpeechRecognizerAuthorizationStatus.restricted:
-                    call.reject(self.MESSAGE_RESTRICTED)
+                    call.reject(self.messageRestricted)
                     break
 
                 case SFSpeechRecognizerAuthorizationStatus.notDetermined:
-                    call.reject(self.MESSAGE_NOT_DETERMINED)
+                    call.reject(self.messageNotDetermined)
                     break
 
                 @unknown default:
-                    call.reject(self.MESSAGE_UNKNOWN)
+                    call.reject(self.messageUnknown)
                 }
 
                 if !speechAuthGranted {
@@ -233,7 +232,7 @@ public class SpeechRecognition: CAPPlugin {
                     if granted {
                         call.resolve()
                     } else {
-                        call.reject(self.MESSAGE_ACCESS_DENIED_MICROPHONE)
+                        call.reject(self.messageAccessDeniedMicrophone)
                     }
                 }
             }
