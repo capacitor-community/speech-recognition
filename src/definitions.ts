@@ -1,4 +1,4 @@
-import type { PermissionState, PluginListenerHandle } from "@capacitor/core";
+import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 export interface PermissionStatus {
   /**
@@ -90,8 +90,8 @@ export interface SpeechRecognitionPlugin {
    * @since 2.0.2
    */
   addListener(
-    eventName: "partialResults",
-    listenerFunc: (data: { matches: string[] }) => void
+    eventName: 'partialResults',
+    listenerFunc: (data: { matches: string[] }) => void,
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
   /**
@@ -100,8 +100,8 @@ export interface SpeechRecognitionPlugin {
    * @since 6.0.0
    */
   addListener(
-    eventName: "listeningState",
-    listenerFunc: (data: { status: 'started' | 'stopped' }) => void
+    eventName: 'listeningState',
+    listenerFunc: (data: { status: 'started' | 'stopped' }) => void,
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
   /**
    * Remove all the listeners that are attached to this plugin.
