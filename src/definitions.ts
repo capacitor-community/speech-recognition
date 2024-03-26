@@ -1,5 +1,13 @@
 import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
+type EventName = 'partialResults' | 'listeningState';
+
+type EventData<T> = T extends 'partialResults'
+  ? { matches: string[] }
+  : T extends 'listeningState'
+  ? { status: 'started' | 'stopped' }
+  : never;
+
 export interface PermissionStatus {
   /**
    * Permission state for speechRecognition alias.
@@ -81,28 +89,21 @@ export interface SpeechRecognitionPlugin {
    */
   requestPermissions(): Promise<PermissionStatus>;
   /**
-   * Called when partialResults set to true and result received.
+   * Event: partialResults Called when partialResults set to true and result received.
+   * Event: listeningState Called when listening state changed.
    *
    * On Android it doesn't work if popup is true.
    *
    * Provides partial result.
    *
-   * @since 2.0.2
+   * @since 2.0.2 (partialResults)
+   * @since 6.0.0 (listeningState)
    */
-  addListener(
-    eventName: 'partialResults',
-    listenerFunc: (data: { matches: string[] }) => void,
+  addListener<T extends EventName>(
+    eventName: T,
+    listenerFunc: (data: EventData<T>) => void,
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
 
-  /**
-   * Called when listening state changed.
-   *
-   * @since 6.0.0
-   */
-  addListener(
-    eventName: 'listeningState',
-    listenerFunc: (data: { status: 'started' | 'stopped' }) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
   /**
    * Remove all the listeners that are attached to this plugin.
    *
