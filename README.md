@@ -46,20 +46,20 @@ No further action required.
 
 <docgen-index>
 
-- [`available()`](#available)
-- [`start(...)`](#start)
-- [`stop()`](#stop)
-- [`getSupportedLanguages()`](#getsupportedlanguages)
-- [`hasPermission()`](#haspermission)
-- [`requestPermission()`](#requestpermission)
-- [`checkPermissions()`](#checkpermissions)
-- [`requestPermissions()`](#requestpermissions)
-- [`addListener('partialResults', ...)`](#addlistenerpartialresults)
-- [`addListener('listeningState', ...)`](#addlistenerlisteningstate)
-- [`removeAllListeners()`](#removealllisteners)
-- [`isListening()`](#islistening)
-- [Interfaces](#interfaces)
-- [Type Aliases](#type-aliases)
+* [`available()`](#available)
+* [`start(...)`](#start)
+* [`stop()`](#stop)
+* [`getSupportedLanguages()`](#getsupportedlanguages)
+* [`hasPermission()`](#haspermission)
+* [`isListening()`](#islistening)
+* [`requestPermission()`](#requestpermission)
+* [`checkPermissions()`](#checkpermissions)
+* [`requestPermissions()`](#requestpermissions)
+* [`addListener('partialResults', ...)`](#addlistenerpartialresults)
+* [`addListener('listeningState', ...)`](#addlistenerlisteningstate)
+* [`removeAllListeners()`](#removealllisteners)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -111,12 +111,13 @@ This method will check if speech recognition feature is available on the device.
 
 **Returns:** <code>Promise&lt;{ available: boolean; }&gt;</code>
 
----
+--------------------
+
 
 ### start(...)
 
 ```typescript
-start(options?: UtteranceOptions) => Promise<{ matches?: string[]; }>
+start(options?: UtteranceOptions | undefined) => Promise<{ matches?: string[]; }>
 ```
 
 This method will start to listen for utterance.
@@ -130,7 +131,8 @@ event `partialResults` will be emit for each partial result, until stopped.
 
 **Returns:** <code>Promise&lt;{ matches?: string[]; }&gt;</code>
 
----
+--------------------
+
 
 ### stop()
 
@@ -140,7 +142,8 @@ stop() => Promise<void>
 
 This method will stop listening for utterance
 
----
+--------------------
+
 
 ### getSupportedLanguages()
 
@@ -154,7 +157,8 @@ It's not available on Android 13 and newer.
 
 **Returns:** <code>Promise&lt;{ languages: any[]; }&gt;</code>
 
----
+--------------------
+
 
 ### hasPermission()
 
@@ -166,7 +170,21 @@ This method will check for audio permissions.
 
 **Returns:** <code>Promise&lt;{ permission: boolean; }&gt;</code>
 
----
+--------------------
+
+
+### isListening()
+
+```typescript
+isListening() => Promise<{ listening: boolean; }>
+```
+
+This method will check if speech recognition is listening.
+
+**Returns:** <code>Promise&lt;{ listening: boolean; }&gt;</code>
+
+--------------------
+
 
 ### requestPermission()
 
@@ -176,7 +194,8 @@ requestPermission() => Promise<void>
 
 This method will prompt the user for audio permission.
 
----
+--------------------
+
 
 ### checkPermissions()
 
@@ -190,7 +209,8 @@ Check the speech recognition permission.
 
 **Since:** 5.0.0
 
----
+--------------------
+
 
 ### requestPermissions()
 
@@ -204,12 +224,13 @@ Request the speech recognition permission.
 
 **Since:** 5.0.0
 
----
+--------------------
+
 
 ### addListener('partialResults', ...)
 
 ```typescript
-addListener(eventName: "partialResults", listenerFunc: (data: { matches: string[]; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'partialResults', listenerFunc: (data: { matches: string[]; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Called when partialResults set to true and result received.
@@ -227,27 +248,28 @@ Provides partial result.
 
 **Since:** 2.0.2
 
----
+--------------------
+
 
 ### addListener('listeningState', ...)
 
 ```typescript
-addListener(eventName: "listeningState", listenerFunc: (data: { status: 'started' | 'stopped'; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'listeningState', listenerFunc: (data: { status: 'started' | 'stopped'; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Called when listening state changed.
 
-
-| Param              | Type                                                   |
-| ------------------ | ------------------------------------------------------ |
-| **`eventName`**    | <code>'listeningState'</code>                          |
-| **`listenerFunc`** | <code>(data: { status: 'started' | 'stopped'; }) =&gt; void</code> |
+| Param              | Type                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| **`eventName`**    | <code>'listeningState'</code>                                       |
+| **`listenerFunc`** | <code>(data: { status: 'started' \| 'stopped'; }) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 6.0.0
 
----
+--------------------
+
 
 ### removeAllListeners()
 
@@ -259,19 +281,11 @@ Remove all the listeners that are attached to this plugin.
 
 **Since:** 4.0.0
 
-### isListening()
+--------------------
 
-```typescript
-isListening() => Promise<{ listening: boolean }>
-```
-
-Check if the player is currently listening.
-
-**Since:** 6.0.0
-
----
 
 ### Interfaces
+
 
 #### UtteranceOptions
 
@@ -283,11 +297,13 @@ Check if the player is currently listening.
 | **`popup`**          | <code>boolean</code> | display popup window when listening for utterance (Android only) |
 | **`partialResults`** | <code>boolean</code> | return partial results if found                                  |
 
+
 #### PermissionStatus
 
 | Prop                    | Type                                                        | Description                                                                                                                                                                      | Since |
 | ----------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`speechRecognition`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for speechRecognition alias. On Android it requests/checks RECORD_AUDIO permission On iOS it requests/checks the speech recognition and microphone permissions. | 5.0.0 |
+
 
 #### PluginListenerHandle
 
@@ -295,7 +311,9 @@ Check if the player is currently listening.
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
+
 ### Type Aliases
+
 
 #### PermissionState
 
