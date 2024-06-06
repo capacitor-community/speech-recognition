@@ -58,6 +58,8 @@ export interface SpeechRecognitionPlugin {
    * This method will check if speech recognition is listening.
    * @param none
    * @returns boolean true/false if speech recognition is currently listening
+   *
+   * @since 5.1.0
    */
   isListening(): Promise<{ listening: boolean }>;
   /**
@@ -97,7 +99,7 @@ export interface SpeechRecognitionPlugin {
   /**
    * Called when listening state changed.
    *
-   * @since 6.0.0
+   * @since 5.1.0
    */
   addListener(
     eventName: 'listeningState',
