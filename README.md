@@ -183,6 +183,8 @@ This method will check if speech recognition is listening.
 
 **Returns:** <code>Promise&lt;{ listening: boolean; }&gt;</code>
 
+**Since:** 5.1.0
+
 --------------------
 
 
@@ -266,7 +268,7 @@ Called when listening state changed.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
-**Since:** 6.0.0
+**Since:** 5.1.0
 
 --------------------
 
