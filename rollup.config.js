@@ -4,7 +4,7 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorPrivacyScreen',
+      name: 'capacitorSpeechRecognition',
       globals: {
         '@capacitor/core': 'capacitorExports',
       },
