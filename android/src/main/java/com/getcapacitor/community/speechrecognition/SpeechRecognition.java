@@ -44,14 +44,11 @@ public class SpeechRecognition extends Plugin implements Constants {
         bridge
             .getWebView()
             .post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
-                        SpeechRecognitionListener listener = new SpeechRecognitionListener();
-                        speechRecognizer.setRecognitionListener(listener);
-                        Logger.info(getLogTag(), "Instantiated SpeechRecognizer in load()");
-                    }
+                () -> {
+                    speechRecognizer = SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
+                    SpeechRecognitionListener listener = new SpeechRecognitionListener();
+                    speechRecognizer.setRecognitionListener(listener);
+                    Logger.info(getLogTag(), "Instantiated SpeechRecognizer in load()");
                 }
             );
     }
