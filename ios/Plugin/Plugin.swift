@@ -164,24 +164,6 @@ public class SpeechRecognition: CAPPlugin {
         ])
     }
 
-    @objc func hasPermission(_ call: CAPPluginCall) {
-        let status: SFSpeechRecognizerAuthorizationStatus = SFSpeechRecognizer.authorizationStatus()
-        let speechAuthGranted: Bool = (status == SFSpeechRecognizerAuthorizationStatus.authorized)
-
-        if !speechAuthGranted {
-            call.resolve([
-                "permission": false
-            ])
-            return
-        }
-
-        AVAudioSession.sharedInstance().requestRecordPermission { (granted: Bool) in
-            call.resolve([
-                "permission": granted
-            ])
-        }
-    }
-
     @objc override public func checkPermissions(_ call: CAPPluginCall) {
         let status: SFSpeechRecognizerAuthorizationStatus = SFSpeechRecognizer.authorizationStatus()
         let permission: String
@@ -196,48 +178,6 @@ public class SpeechRecognition: CAPPlugin {
             permission = "prompt"
         }
         call.resolve(["speechRecognition": permission])
-    }
-
-    @objc func requestPermission(_ call: CAPPluginCall) {
-        SFSpeechRecognizer.requestAuthorization { (status: SFSpeechRecognizerAuthorizationStatus) in
-            DispatchQueue.main.async {
-                var speechAuthGranted: Bool = false
-
-                switch status {
-                case SFSpeechRecognizerAuthorizationStatus.authorized:
-                    speechAuthGranted = true
-                    break
-
-                case SFSpeechRecognizerAuthorizationStatus.denied:
-                    call.reject(self.messageAccessDenied)
-                    break
-
-                case SFSpeechRecognizerAuthorizationStatus.restricted:
-                    call.reject(self.messageRestricted)
-                    break
-
-                case SFSpeechRecognizerAuthorizationStatus.notDetermined:
-                    call.reject(self.messageNotDetermined)
-                    break
-
-                @unknown default:
-                    call.reject(self.messageUnknown)
-                }
-
-                if !speechAuthGranted {
-                    return
-                }
-
-                AVAudioSession.sharedInstance().requestRecordPermission { (granted: Bool) in
-                    if granted {
-                        call.resolve()
-                    } else {
-                        call.reject(self.messageAccessDeniedMicrophone)
-                    }
-                }
-            }
-
-        }
     }
 
     @objc override public func requestPermissions(_ call: CAPPluginCall) {

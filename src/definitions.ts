@@ -46,15 +46,6 @@ export interface SpeechRecognitionPlugin {
    */
   getSupportedLanguages(): Promise<{ languages: any[] }>;
   /**
-   * This method will check for audio permissions.
-   * @param none
-   * @returns permission - boolean true/false if permissions are granted
-   *
-   * @deprecated use `checkPermissions()`
-   */
-  hasPermission(): Promise<{ permission: boolean }>;
-
-  /**
    * This method will check if speech recognition is listening.
    * @param none
    * @returns boolean true/false if speech recognition is currently listening
@@ -62,14 +53,6 @@ export interface SpeechRecognitionPlugin {
    * @since 5.1.0
    */
   isListening(): Promise<{ listening: boolean }>;
-  /**
-   * This method will prompt the user for audio permission.
-   * @param none
-   * @returns void
-   *
-   * @deprecated use `requestPermissions()`
-   */
-  requestPermission(): Promise<void>;
   /**
    * Check the speech recognition permission.
    *

@@ -50,9 +50,7 @@ No further action required.
 * [`start(...)`](#start)
 * [`stop()`](#stop)
 * [`getSupportedLanguages()`](#getsupportedlanguages)
-* [`hasPermission()`](#haspermission)
 * [`isListening()`](#islistening)
-* [`requestPermission()`](#requestpermission)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [`addListener('partialResults', ...)`](#addlistenerpartialresults-)
@@ -160,19 +158,6 @@ It's not available on Android 13 and newer.
 --------------------
 
 
-### hasPermission()
-
-```typescript
-hasPermission() => Promise<{ permission: boolean; }>
-```
-
-This method will check for audio permissions.
-
-**Returns:** <code>Promise&lt;{ permission: boolean; }&gt;</code>
-
---------------------
-
-
 ### isListening()
 
 ```typescript
@@ -184,17 +169,6 @@ This method will check if speech recognition is listening.
 **Returns:** <code>Promise&lt;{ listening: boolean; }&gt;</code>
 
 **Since:** 5.1.0
-
---------------------
-
-
-### requestPermission()
-
-```typescript
-requestPermission() => Promise<void>
-```
-
-This method will prompt the user for audio permission.
 
 --------------------
 
