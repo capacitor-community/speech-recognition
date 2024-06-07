@@ -41,12 +41,26 @@ Check formatting and code quality, autoformat/autofix if possible.
 
 This template is integrated with ESLint, Prettier, and SwiftLint. Using these tools is completely optional, but the [Capacitor Community](https://github.com/capacitor-community/) strives to have consistent code style and structure for easier cooperation.
 
+## Versioning
+
+Don't change the plugin version manually, the version change is automated with `standard-version` package.
+
 ## Publishing
 
-There is a `prepublishOnly` hook in `package.json` which prepares the plugin before publishing, so all you need to do is run:
+First run:
 
 ```shell
-npm publish
+npm release
 ```
+
+That will update the plugin version and update the `CHANGELOG.md` file with latest changes. Then it will ask you to run:
+
+```shell
+git push --follow-tags origin master && npm publish
+```
+
+That creates a tag on gitbhub and publishes the package on npm.
+
+Go to the [github tags section](https://github.com/capacitor-community/speech-recognition/tags), pick the latest tag and create a release for it.
 
 > **Note**: The [`files`](https://docs.npmjs.com/cli/v7/configuring-npm/package-json#files) array in `package.json` specifies which files get published. If you rename files/directories or add files elsewhere, you may need to update it.
