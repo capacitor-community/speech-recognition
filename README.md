@@ -55,8 +55,8 @@ No further action required.
 * [`requestPermission()`](#requestpermission)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
-* [`addListener('partialResults', ...)`](#addlistenerpartialresults)
-* [`addListener('listeningState', ...)`](#addlistenerlisteningstate)
+* [`addListener('partialResults', ...)`](#addlistenerpartialresults-)
+* [`addListener('listeningState', ...)`](#addlistenerlisteningstate-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -232,7 +232,7 @@ Request the speech recognition permission.
 ### addListener('partialResults', ...)
 
 ```typescript
-addListener(eventName: 'partialResults', listenerFunc: (data: { matches: string[]; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'partialResults', listenerFunc: (data: { matches: string[]; }) => void) => Promise<PluginListenerHandle>
 ```
 
 Called when partialResults set to true and result received.
@@ -246,7 +246,7 @@ Provides partial result.
 | **`eventName`**    | <code>'partialResults'</code>                          |
 | **`listenerFunc`** | <code>(data: { matches: string[]; }) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 2.0.2
 
@@ -256,7 +256,7 @@ Provides partial result.
 ### addListener('listeningState', ...)
 
 ```typescript
-addListener(eventName: 'listeningState', listenerFunc: (data: { status: 'started' | 'stopped'; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'listeningState', listenerFunc: (data: { status: 'started' | 'stopped'; }) => void) => Promise<PluginListenerHandle>
 ```
 
 Called when listening state changed.
@@ -266,7 +266,7 @@ Called when listening state changed.
 | **`eventName`**    | <code>'listeningState'</code>                                       |
 | **`listenerFunc`** | <code>(data: { status: 'started' \| 'stopped'; }) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 5.1.0
 

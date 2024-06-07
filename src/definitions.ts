@@ -94,7 +94,7 @@ export interface SpeechRecognitionPlugin {
   addListener(
     eventName: 'partialResults',
     listenerFunc: (data: { matches: string[] }) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   /**
    * Called when listening state changed.
@@ -104,7 +104,7 @@ export interface SpeechRecognitionPlugin {
   addListener(
     eventName: 'listeningState',
     listenerFunc: (data: { status: 'started' | 'stopped' }) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   /**
    * Remove all the listeners that are attached to this plugin.
    *
