@@ -115,25 +115,8 @@ public class SpeechRecognition extends Plugin implements Constants {
     }
 
     @PluginMethod
-    public void hasPermission(PluginCall call) {
-        call.resolve(new JSObject().put("permission", hasAudioPermissions(RECORD_AUDIO_PERMISSION)));
-    }
-
-    @PluginMethod
     public void isListening(PluginCall call) {
         call.resolve(new JSObject().put("listening", SpeechRecognition.this.listening));
-    }
-
-    @PluginMethod
-    public void requestPermission(PluginCall call) {
-        if (!hasAudioPermissions(RECORD_AUDIO_PERMISSION)) {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                bridge.getActivity().requestPermissions(new String[] { RECORD_AUDIO_PERMISSION }, REQUEST_CODE_PERMISSION);
-                call.resolve();
-            } else {
-                call.resolve();
-            }
-        }
     }
 
     @ActivityCallback
