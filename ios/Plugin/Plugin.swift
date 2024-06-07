@@ -101,6 +101,7 @@ public class SpeechRecognition: CAPPlugin {
                     if result!.isFinal {
                         self.audioEngine!.stop()
                         self.audioEngine?.inputNode.removeTap(onBus: 0)
+                        self.notifyListeners("listeningState", data: ["status": "stopped"])
                         self.recognitionTask = nil
                         self.recognitionRequest = nil
                     }
@@ -111,7 +112,7 @@ public class SpeechRecognition: CAPPlugin {
                     self.audioEngine?.inputNode.removeTap(onBus: 0)
                     self.recognitionRequest = nil
                     self.recognitionTask = nil
-
+                    self.notifyListeners("listeningState", data: ["status": "stopped"])
                     call.reject(error!.localizedDescription)
                 }
             })
