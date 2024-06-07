@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResult;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
+import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -24,11 +25,14 @@ import java.util.Locale;
 import java.util.concurrent.locks.ReentrantLock;
 import org.json.JSONArray;
 
-@CapacitorPlugin(permissions = { @Permission(strings = { Manifest.permission.RECORD_AUDIO }, alias = "speechRecognition") })
+@CapacitorPlugin(
+    permissions = { @Permission(strings = { Manifest.permission.RECORD_AUDIO }, alias = SpeechRecognition.SPEECH_RECOGNITION) }
+)
 public class SpeechRecognition extends Plugin implements Constants {
 
     public static final String TAG = "SpeechRecognition";
     private static final String LISTENING_EVENT = "listeningState";
+    static final String SPEECH_RECOGNITION = "speechRecognition";
 
     private Receiver languageReceiver;
     private SpeechRecognizer speechRecognizer;
@@ -69,7 +73,7 @@ public class SpeechRecognition extends Plugin implements Constants {
             return;
         }
 
-        if (!hasAudioPermissions(RECORD_AUDIO_PERMISSION)) {
+        if (getPermissionState(SPEECH_RECOGNITION) != PermissionState.GRANTED) {
             call.reject(MISSING_PERMISSION);
             return;
         }
@@ -143,14 +147,6 @@ public class SpeechRecognition extends Plugin implements Constants {
 
     private boolean isSpeechRecognitionAvailable() {
         return SpeechRecognizer.isRecognitionAvailable(bridge.getContext());
-    }
-
-    private boolean hasAudioPermissions(String type) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-
-        return hasPermission(type);
     }
 
     private void listening(boolean value) {
