@@ -25,7 +25,9 @@ import java.util.Locale;
 import java.util.concurrent.locks.ReentrantLock;
 import org.json.JSONArray;
 
-@CapacitorPlugin(permissions = { @Permission(strings = { Manifest.permission.RECORD_AUDIO }, alias = SpeechRecognition.SPEECH_RECOGNITION ) })
+@CapacitorPlugin(
+    permissions = { @Permission(strings = { Manifest.permission.RECORD_AUDIO }, alias = SpeechRecognition.SPEECH_RECOGNITION) }
+)
 public class SpeechRecognition extends Plugin implements Constants {
 
     public static final String TAG = "SpeechRecognition";
