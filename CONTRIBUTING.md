@@ -50,7 +50,7 @@ Don't change the plugin version manually, the version change is automated with `
 First run:
 
 ```shell
-npm release
+npm run release
 ```
 
 That will update the plugin version and update the `CHANGELOG.md` file with latest changes. Then it will ask you to run:
