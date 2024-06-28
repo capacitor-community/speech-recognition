@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.1](https://github.com/capacitor-community/speech-recognition/compare/v6.0.0...v6.0.1) (2024-06-28)
+
+
+### Bug Fixes
+
+* **ios:** proper isListening return ([#103](https://github.com/capacitor-community/speech-recognition/issues/103)) ([daf40a7](https://github.com/capacitor-community/speech-recognition/commit/daf40a73fda9b1caa5e84df41bf15ff687617742))
+
 ## [6.0.0](https://github.com/capacitor-community/speech-recognition/compare/v5.1.0...v6.0.0) (2024-06-07)
 
 
