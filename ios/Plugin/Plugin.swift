@@ -148,7 +148,7 @@ public class SpeechRecognition: CAPPlugin {
     @objc func isListening(_ call: CAPPluginCall) {
         let isListening = self.audioEngine?.isRunning ?? false
         call.resolve([
-            "isListening": isListening
+            "listening": isListening
         ])
     }
 
