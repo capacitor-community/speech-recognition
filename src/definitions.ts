@@ -74,7 +74,7 @@ export interface SpeechRecognitionPlugin {
    */
   addListener(
     eventName: 'endOfSegmentedSession',
-    listenerFunc: () => void
+    listenerFunc: () => void,
   ): Promise<PluginListenerHandle>;
   /**
    * Called when allowForSilence set to > 0 and segment result received. (Android only)
@@ -85,9 +85,10 @@ export interface SpeechRecognitionPlugin {
    *
    * @since 6.0.2
    */
-  addListener(eventName: 'segmentResults', listenerFunc: (data: {
-    matches: string[];
-  }) => void): Promise<PluginListenerHandle>;
+  addListener(
+    eventName: 'segmentResults',
+    listenerFunc: (data: { matches: string[] }) => void,
+  ): Promise<PluginListenerHandle>;
   /**
    * Called when partialResults set to true and result received.
    *
