@@ -83,7 +83,8 @@ public class SpeechRecognition extends Plugin implements Constants {
         String prompt = call.getString("prompt", null);
         boolean partialResults = call.getBoolean("partialResults", false);
         boolean popup = call.getBoolean("popup", false);
-        beginListening(language, maxResults, prompt, partialResults, popup, call);
+        int allowForSilence = call.getInt("allowForSilence", 0);
+        beginListening(language, maxResults, prompt, partialResults, popup, call, allowForSilence);
     }
 
     @PluginMethod
@@ -159,7 +160,8 @@ public class SpeechRecognition extends Plugin implements Constants {
         String prompt,
         final boolean partialResults,
         boolean showPopup,
-        PluginCall call
+        PluginCall call,
+        int allowForSilence
     ) {
         Logger.info(getLogTag(), "Beginning to listen for audible speech");
 
@@ -170,6 +172,12 @@ public class SpeechRecognition extends Plugin implements Constants {
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, bridge.getActivity().getPackageName());
         intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, partialResults);
         intent.putExtra("android.speech.extra.DICTATION_MODE", partialResults);
+
+        if (allowForSilence > 0) {
+            intent.putExtra(RecognizerIntent.EXTRA_SEGMENTED_SESSION, RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS);
+            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, allowForSilence);
+            intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, allowForSilence);
+        }
 
         if (prompt != null) {
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
@@ -330,6 +338,33 @@ public class SpeechRecognition extends Plugin implements Constants {
                     notifyListeners("partialResults", ret);
                 }
             } catch (Exception ex) {}
+        }
+
+        @Override
+        public void onSegmentResults(Bundle results) {
+            ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+
+            try {
+                JSArray jsArray = new JSArray(matches);
+
+                if (this.call != null) {
+                    if (!this.partialResults) {
+                        this.call.resolve(new JSObject().put("status", "success").put("matches", jsArray));
+                    } else {
+                        JSObject ret = new JSObject();
+                        ret.put("matches", jsArray);
+                        notifyListeners("segmentResults", ret);
+                    }
+                }
+            } catch (Exception ex) {
+                this.call.resolve(new JSObject().put("status", "error").put("message", ex.getMessage()));
+            }
+        }
+
+        @Override
+        public void onEndOfSegmentedSession() {
+            JSObject ret = new JSObject();
+            notifyListeners("endOfSegmentedSession", ret);
         }
 
         @Override

@@ -66,6 +66,30 @@ export interface SpeechRecognitionPlugin {
    */
   requestPermissions(): Promise<PermissionStatus>;
   /**
+   * Called when allowForSilence set to > 0 and segmented session has ended. (Android only)
+   *
+   * On Android it doesn't work if popup is true.
+   *
+   * @since 6.0.2
+   */
+  addListener(
+    eventName: 'endOfSegmentedSession',
+    listenerFunc: () => void,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Called when allowForSilence set to > 0 and segment result received. (Android only)
+   *
+   * On Android it doesn't work if popup is true.
+   *
+   * Provides segment result.
+   *
+   * @since 6.0.2
+   */
+  addListener(
+    eventName: 'segmentResults',
+    listenerFunc: (data: { matches: string[] }) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
    * Called when partialResults set to true and result received.
    *
    * On Android it doesn't work if popup is true.
@@ -78,7 +102,6 @@ export interface SpeechRecognitionPlugin {
     eventName: 'partialResults',
     listenerFunc: (data: { matches: string[] }) => void,
   ): Promise<PluginListenerHandle>;
-
   /**
    * Called when listening state changed.
    *
@@ -117,4 +140,12 @@ export interface UtteranceOptions {
    * return partial results if found
    */
   partialResults?: boolean;
+  /**
+   * allows milliseconds of silence during recording. Needs number over 0 (Android only)
+   *
+   * You need to listen to segmentResults to receive the data.
+   *
+   * On Android it doesn't work if popup is true.
+   */
+  allowForSilence?: number;
 }
