@@ -1,4 +1,4 @@
-import type { PermissionState, PluginListenerHandle } from "@capacitor/core";
+import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 export interface PermissionStatus {
   /**
@@ -14,18 +14,45 @@ export interface PermissionStatus {
 }
 
 export interface SpeechRecognitionPlugin {
+  /**
+   * This method will check if speech recognition feature is available on the device.
+   * @param none
+   * @returns available - boolean true/false for availability
+   */
   available(): Promise<{ available: boolean }>;
-  start(options?: UtteranceOptions): Promise<{ matches: string[] }>;
+  /**
+   * This method will start to listen for utterance.
+   *
+   * if `partialResults` is `true`, the function respond directly without result and
+   * event `partialResults` will be emit for each partial result, until stopped.
+   *
+   * @param options
+   * @returns void or array of string results
+   */
+  start(options?: UtteranceOptions): Promise<{ matches?: string[] }>;
+  /**
+   * This method will stop listening for utterance
+   * @param none
+   * @returns void
+   */
   stop(): Promise<void>;
+  /**
+   * This method will return list of languages supported by the speech recognizer.
+   *
+   * It's not available on Android 13 and newer.
+   *
+   * @param none
+   * @returns languages - array string of languages
+   */
   getSupportedLanguages(): Promise<{ languages: any[] }>;
   /**
-   * @deprecated use `checkPermissions()`
+   * This method will check if speech recognition is listening.
+   * @param none
+   * @returns boolean true/false if speech recognition is currently listening
+   *
+   * @since 5.1.0
    */
-  hasPermission(): Promise<{ permission: boolean }>;
-  /**
-   * @deprecated use `requestPermissions()`
-   */
-  requestPermission(): Promise<void>;
+  isListening(): Promise<{ listening: boolean }>;
   /**
    * Check the speech recognition permission.
    *
@@ -48,9 +75,19 @@ export interface SpeechRecognitionPlugin {
    * @since 2.0.2
    */
   addListener(
-    eventName: "partialResults",
-    listenerFunc: (data: { matches: string[] }) => void
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+    eventName: 'partialResults',
+    listenerFunc: (data: { matches: string[] }) => void,
+  ): Promise<PluginListenerHandle>;
+
+  /**
+   * Called when listening state changed.
+   *
+   * @since 5.1.0
+   */
+  addListener(
+    eventName: 'listeningState',
+    listenerFunc: (data: { status: 'started' | 'stopped' }) => void,
+  ): Promise<PluginListenerHandle>;
   /**
    * Remove all the listeners that are attached to this plugin.
    *
@@ -60,10 +97,25 @@ export interface SpeechRecognitionPlugin {
 }
 
 export interface UtteranceOptions {
+  /**
+   * key returned from `getSupportedLanguages()`
+   */
   language?: string;
+  /**
+   * maximum number of results to return (5 is max)
+   */
   maxResults?: number;
+  /**
+   * prompt message to display on popup (Android only)
+   */
   prompt?: string;
+  /**
+   * display popup window when listening for utterance (Android only)
+   */
   popup?: boolean;
+  /**
+   * return partial results if found
+   */
   partialResults?: boolean;
   addPunctuation?: boolean;
 }

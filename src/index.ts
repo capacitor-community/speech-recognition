@@ -1,12 +1,13 @@
-import { registerPlugin } from "@capacitor/core";
-import type { SpeechRecognitionPlugin } from "./definitions";
+import { registerPlugin } from '@capacitor/core';
+
+import type { SpeechRecognitionPlugin } from './definitions';
 
 const SpeechRecognition = registerPlugin<SpeechRecognitionPlugin>(
-  "SpeechRecognition",
+  'SpeechRecognition',
   {
-    web: () => import("./web").then((m) => new m.SpeechRecognitionWeb()),
-  }
+    web: () => import('./web').then(m => new m.SpeechRecognitionWeb()),
+  },
 );
 
-export * from "./definitions";
+export * from './definitions';
 export { SpeechRecognition };
