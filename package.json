@@ -13,6 +13,9 @@
     "ios/Plugin/",
     "CapacitorCommunitySpeechRecognition.podspec"
   ],
+  "repository": {
+    "url": "https://github.com/MedFlyt/capacitor-speech-recognition"
+  },
   "author": "Bini Barazany <bgt636@gmail.com>",
   "license": "MIT",
   "keywords": [
