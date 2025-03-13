@@ -13,18 +13,8 @@
     "ios/Plugin/",
     "CapacitorCommunitySpeechRecognition.podspec"
   ],
-  "author": "Priyank Patel <priyank.patel@stackspace.ca>",
-  "contributors": [
-    "Matteo Padovano <mrbatista@users.noreply.github.com>"
-  ],
+  "author": "Bini Barazany <bgt636@gmail.com>",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/capacitor-community/speech-recognition.git"
-  },
-  "bugs": {
-    "url": "https://github.com/capacitor-community/speech-recognition/issues"
-  },
   "keywords": [
     "capacitor",
     "plugin",
