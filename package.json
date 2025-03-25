@@ -1,6 +1,6 @@
 {
   "name": "@capacitor-community/speech-recognition",
-  "version": "7.0.0",
+  "version": "6.0.1",
   "description": "A native plugin for speech recognition",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
