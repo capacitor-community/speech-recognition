@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/capacitor-community/speech-recognition/compare/v6.0.1...v7.0.0) (2025-03-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* This plugin now only supports Capacitor 7.
+
+Co-authored-by: Thomas Hammerl <thomas.hammerl@semanticlabs.at>
+
+### Features
+
+* update to Capacitor 7 ([#114](https://github.com/capacitor-community/speech-recognition/issues/114)) ([bb13bee](https://github.com/capacitor-community/speech-recognition/commit/bb13beec20410b6d3b2e4192cf9fa14cc55c3360))
+
 ### [6.0.1](https://github.com/capacitor-community/speech-recognition/compare/v6.0.0...v6.0.1) (2024-06-28)
 
 
