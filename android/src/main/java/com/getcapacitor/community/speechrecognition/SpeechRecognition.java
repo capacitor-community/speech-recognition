@@ -47,14 +47,12 @@ public class SpeechRecognition extends Plugin implements Constants {
         super.load();
         bridge
             .getWebView()
-            .post(
-                () -> {
-                    speechRecognizer = SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
-                    SpeechRecognitionListener listener = new SpeechRecognitionListener();
-                    speechRecognizer.setRecognitionListener(listener);
-                    Logger.info(getLogTag(), "Instantiated SpeechRecognizer in load()");
-                }
-            );
+            .post(() -> {
+                speechRecognizer = SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
+                SpeechRecognitionListener listener = new SpeechRecognitionListener();
+                speechRecognizer.setRecognitionListener(listener);
+                Logger.info(getLogTag(), "Instantiated SpeechRecognizer in load()");
+            });
     }
 
     @PluginMethod
@@ -180,55 +178,51 @@ public class SpeechRecognition extends Plugin implements Constants {
         } else {
             bridge
                 .getWebView()
-                .post(
-                    () -> {
-                        try {
-                            SpeechRecognition.this.lock.lock();
+                .post(() -> {
+                    try {
+                        SpeechRecognition.this.lock.lock();
 
-                            if (speechRecognizer != null) {
-                                speechRecognizer.cancel();
-                                speechRecognizer.destroy();
-                                speechRecognizer = null;
-                            }
-
-                            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
-                            SpeechRecognitionListener listener = new SpeechRecognitionListener();
-                            listener.setCall(call);
-                            listener.setPartialResults(partialResults);
-                            speechRecognizer.setRecognitionListener(listener);
-                            speechRecognizer.startListening(intent);
-                            SpeechRecognition.this.listening(true);
-                            if (partialResults) {
-                                call.resolve();
-                            }
-                        } catch (Exception ex) {
-                            call.reject(ex.getMessage());
-                        } finally {
-                            SpeechRecognition.this.lock.unlock();
+                        if (speechRecognizer != null) {
+                            speechRecognizer.cancel();
+                            speechRecognizer.destroy();
+                            speechRecognizer = null;
                         }
+
+                        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(bridge.getActivity());
+                        SpeechRecognitionListener listener = new SpeechRecognitionListener();
+                        listener.setCall(call);
+                        listener.setPartialResults(partialResults);
+                        speechRecognizer.setRecognitionListener(listener);
+                        speechRecognizer.startListening(intent);
+                        SpeechRecognition.this.listening(true);
+                        if (partialResults) {
+                            call.resolve();
+                        }
+                    } catch (Exception ex) {
+                        call.reject(ex.getMessage());
+                    } finally {
+                        SpeechRecognition.this.lock.unlock();
                     }
-                );
+                });
         }
     }
 
     private void stopListening() {
         bridge
             .getWebView()
-            .post(
-                () -> {
-                    try {
-                        SpeechRecognition.this.lock.lock();
-                        if (SpeechRecognition.this.listening) {
-                            speechRecognizer.stopListening();
-                            SpeechRecognition.this.listening(false);
-                        }
-                    } catch (Exception ex) {
-                        throw ex;
-                    } finally {
-                        SpeechRecognition.this.lock.unlock();
+            .post(() -> {
+                try {
+                    SpeechRecognition.this.lock.lock();
+                    if (SpeechRecognition.this.listening) {
+                        speechRecognizer.stopListening();
+                        SpeechRecognition.this.listening(false);
                     }
+                } catch (Exception ex) {
+                    throw ex;
+                } finally {
+                    SpeechRecognition.this.lock.unlock();
                 }
-            );
+            });
     }
 
     private class SpeechRecognitionListener implements RecognitionListener {
@@ -270,20 +264,18 @@ public class SpeechRecognition extends Plugin implements Constants {
         public void onEndOfSpeech() {
             bridge
                 .getWebView()
-                .post(
-                    () -> {
-                        try {
-                            SpeechRecognition.this.lock.lock();
-                            SpeechRecognition.this.listening(false);
+                .post(() -> {
+                    try {
+                        SpeechRecognition.this.lock.lock();
+                        SpeechRecognition.this.listening(false);
 
-                            JSObject ret = new JSObject();
-                            ret.put("status", "stopped");
-                            SpeechRecognition.this.notifyListeners(LISTENING_EVENT, ret);
-                        } finally {
-                            SpeechRecognition.this.lock.unlock();
-                        }
+                        JSObject ret = new JSObject();
+                        ret.put("status", "stopped");
+                        SpeechRecognition.this.notifyListeners(LISTENING_EVENT, ret);
+                    } finally {
+                        SpeechRecognition.this.lock.unlock();
                     }
-                );
+                });
         }
 
         @Override
