@@ -67,7 +67,12 @@ public class SpeechRecognition: CAPPlugin {
             do {
                 try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
                 try audioSession.setMode(AVAudioSession.Mode.default)
-                try audioSession.setActive(true, options: AVAudioSession.SetActiveOptions.notifyOthersOnDeactivation)
+                do {
+                    try audioSession.setActive(true, options: AVAudioSession.SetActiveOptions.notifyOthersOnDeactivation)
+                } catch {
+                      call.reject("Microphone is already in use by another application.")
+                      return
+                }
             } catch {
 
             }
