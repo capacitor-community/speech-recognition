@@ -117,4 +117,5 @@ export interface UtteranceOptions {
    * return partial results if found
    */
   partialResults?: boolean;
+  addPunctuation?: boolean;
 }
