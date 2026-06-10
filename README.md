@@ -53,6 +53,8 @@ No further action required.
 * [`isListening()`](#islistening)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
+* [`addListener('endOfSegmentedSession', ...)`](#addlistenerendofsegmentedsession-)
+* [`addListener('segmentResults', ...)`](#addlistenersegmentresults-)
 * [`addListener('partialResults', ...)`](#addlistenerpartialresults-)
 * [`addListener('listeningState', ...)`](#addlistenerlisteningstate-)
 * [`removeAllListeners()`](#removealllisteners)
@@ -203,6 +205,52 @@ Request the speech recognition permission.
 --------------------
 
 
+### addListener('endOfSegmentedSession', ...)
+
+```typescript
+addListener(eventName: 'endOfSegmentedSession', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when allowForSilence set to &gt; 0 and segmented session has ended. (Android only)
+
+On Android it doesn't work if popup is true.
+
+| Param              | Type                                 |
+| ------------------ | ------------------------------------ |
+| **`eventName`**    | <code>'endOfSegmentedSession'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code>           |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.0.2
+
+--------------------
+
+
+### addListener('segmentResults', ...)
+
+```typescript
+addListener(eventName: 'segmentResults', listenerFunc: (data: { matches: string[]; }) => void) => Promise<PluginListenerHandle>
+```
+
+Called when allowForSilence set to &gt; 0 and segment result received. (Android only)
+
+On Android it doesn't work if popup is true.
+
+Provides segment result.
+
+| Param              | Type                                                   |
+| ------------------ | ------------------------------------------------------ |
+| **`eventName`**    | <code>'segmentResults'</code>                          |
+| **`listenerFunc`** | <code>(data: { matches: string[]; }) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.0.2
+
+--------------------
+
+
 ### addListener('partialResults', ...)
 
 ```typescript
@@ -265,13 +313,14 @@ Remove all the listeners that are attached to this plugin.
 
 #### UtteranceOptions
 
-| Prop                 | Type                 | Description                                                      |
-| -------------------- | -------------------- | ---------------------------------------------------------------- |
-| **`language`**       | <code>string</code>  | key returned from `getSupportedLanguages()`                      |
-| **`maxResults`**     | <code>number</code>  | maximum number of results to return (5 is max)                   |
-| **`prompt`**         | <code>string</code>  | prompt message to display on popup (Android only)                |
-| **`popup`**          | <code>boolean</code> | display popup window when listening for utterance (Android only) |
-| **`partialResults`** | <code>boolean</code> | return partial results if found                                  |
+| Prop                  | Type                 | Description                                                                                                                                                                                |
+| --------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`language`**        | <code>string</code>  | key returned from `getSupportedLanguages()`                                                                                                                                                |
+| **`maxResults`**      | <code>number</code>  | maximum number of results to return (5 is max)                                                                                                                                             |
+| **`prompt`**          | <code>string</code>  | prompt message to display on popup (Android only)                                                                                                                                          |
+| **`popup`**           | <code>boolean</code> | display popup window when listening for utterance (Android only)                                                                                                                           |
+| **`partialResults`**  | <code>boolean</code> | return partial results if found                                                                                                                                                            |
+| **`allowForSilence`** | <code>number</code>  | allows milliseconds of silence during recording. Needs number over 0 (Android only) You need to listen to segmentResults to receive the data. On Android it doesn't work if popup is true. |
 
 
 #### PermissionStatus
