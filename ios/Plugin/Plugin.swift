@@ -54,6 +54,7 @@ public class SpeechRecognition: CAPPlugin {
             let language: String = call.getString("language") ?? "en-US"
             let maxResults: Int = call.getInt("maxResults") ?? self.defaultMatches
             let partialResults: Bool = call.getBool("partialResults") ?? false
+            let addPunctuation : Bool = call.getBool("addPunctuation") ?? false
 
             if self.recognitionTask != nil {
                 self.recognitionTask?.cancel()
@@ -80,6 +81,10 @@ public class SpeechRecognition: CAPPlugin {
             self.recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
             self.recognitionRequest?.shouldReportPartialResults = partialResults
 
+            if #available(iOS 16.0, *) {
+                self.recognitionRequest?.addsPunctuation = addPunctuation
+            }
+            
             let inputNode: AVAudioInputNode = self.audioEngine!.inputNode
             let format: AVAudioFormat = inputNode.outputFormat(forBus: 0)
 
